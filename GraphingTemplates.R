@@ -60,8 +60,9 @@ StandardGraphInput <- function(x, adjust.spt = "none", flip = "FALSE") {
     # 1. Extract data from metalist
     x = as.character(x)
     parameter.to.plot <- which(objectnames[[1]] == x)
-    data1 = metalist[[1]][parameter.to.plot] 
-    data2 = metalist[[2]][parameter.to.plot] 
+    # data1 = metalist[[1]][parameter.to.plot] 
+    # data2 = metalist[[2]][parameter.to.plot] 
+    data <- lapply(metalist, function(x){x[parameter.to.plot]})
     
     stopifnot(exists("spt"))
     
@@ -76,15 +77,27 @@ StandardGraphInput <- function(x, adjust.spt = "none", flip = "FALSE") {
     if(flip == TRUE) {adj = -adj}
         
     # 2. Organise into table for plotting (curr.data)
-    n1 = length(unlist(data1)) 
-    n2 = length(unlist(data2))
+    # n1 = length(unlist(data1)) 
+    # n2 = length(unlist(data2))
+    
+    n <- data %>%
+      purrr::map_dbl(function(x) length(unlist(x)))
+  
     
     curr.data = data.frame(
-        "Value" = c(unlist(data1) * adj, unlist(data2) * adj), 
-        "Source" = c(rep(dataset.names[1], n1), rep(dataset.names[2], n2)))
+        # "Value" = c(unlist(data1) * adj, unlist(data2) * adj), 
+        # "Source" = c(rep(dataset.names[1], n1), rep(dataset.names[2], n2)))
         # fix alphabetical ordering of X axis, to actual order of dataset names:
-        curr.data$Source <- factor(curr.data$Source, levels = dataset.names) 
-    
+        
+    "Value" = data %>%
+      purrr::map(function(x) unlist(x)*adj) %>%
+      unlist(.),
+    "Source" = apply(t(1:length(data)), 2, function(x){
+      rep(dataset.names[x], length(unlist(data[[i]])))
+    }) 
+)
+    curr.data$Source <- factor(curr.data$Source, levels = dataset.names) 
+        
     return(curr.data)
 } 
 
