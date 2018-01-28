@@ -15,10 +15,15 @@ ls()
 
 # Where is your data located?
 
+dir <- "/Users/mlouveaux/Documents/Postdoc/Logistique/Conferences_Missions/Szeged_NEUBIAS_2018/TS7/Vasja/Vasja/Datasets"
+
 folder.names <- c(
-    folder.name1 = c("/Users/Lab/Documents/Postdoc/2018_Szeged/TS7_Filopodyan/Materials/Datasets/4a_Manually-curated-tables/")   # <--- Set folder locations of intput data tables
-    , folder.name2 = c("/Users/Lab/Documents/Postdoc/2018_Szeged/TS7_Filopodyan/Materials/Datasets/4a_Big-ctrl-dataset/batch_preprocessed") 
+    folder.name1 = paste0(dir, "/4a_Manually-curated-tables"),   # <--- Set folder locations of intput data tables
+    folder.name2 = paste0(dir, "/4a_Big-ctrl-dataset/batch_preprocessed"),
+    folder.name3 = paste0(dir, "/4a_Big-ctrl-dataset/CAD_Boundertables")
     )
+
+
 n.fold <- length(folder.names)
 cat("Number of folders to analyse :", n.fold)
 folder.names[]
@@ -28,6 +33,7 @@ folder.names[]
 dataset.names <- c(
 	dataset1 = "Manual"    # <---- Insert dataset names here.
 	, dataset2 = "Batch"   # <---- Insert dataset names here.
+	, dataset3 = "Perso"
 	)
 
 # Where to save results?

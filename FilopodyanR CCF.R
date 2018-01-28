@@ -9,7 +9,7 @@
 # correlation function to compute cross-correlation (for each filopodium) at each 
 # value of the offset. It then looks at groups of filopodia that share a similar 
 # relationship between fluorescence and movement (responding vs non-responding filopodia)
-# using hierarchical clustering, and compares the properties of those clusters.
+# using hierarchical clustering, and compares the properties of those clusters.
 
 # Data input: requires an .Rdata file from upstream Filopodyan .R scripts 
 # (load in Section 1).
