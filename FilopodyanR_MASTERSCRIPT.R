@@ -85,7 +85,7 @@ FilopodyanR <- function() {
 metalist    <- list()
 objectnames <- list()
 
-for (iter in 1:2) { #seq_along(folder.names)
+for (iter in seq_along(folder.names)) {
 	rm(list = setdiff(ls(), keep))
 
 	# RUN FILOPODYAN MODULES AS A FUNCTION
@@ -100,7 +100,7 @@ for (iter in 1:2) { #seq_along(folder.names)
 	rm(list = setdiff(ls(), keep))	
 }
 
-names(metalist) <- dataset.names[1:2]
+names(metalist) <- dataset.names
 names(metalist)
 
 ls()
