@@ -98,7 +98,7 @@ initiate <- function() {
 		stop("Please define source folders in parent script.")
 	} else { 
 
-		if(iter == 1) {
+		if(iter == 1) { ### Need to do something with iter -- only 2 iterations possible (e.g. two folders, would be nice to be able to have more)
 			setwd(folder.names[1])
 			print(module.name)
 			print("EXECUTING ON:")
