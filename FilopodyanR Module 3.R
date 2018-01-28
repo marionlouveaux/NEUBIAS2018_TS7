@@ -34,7 +34,7 @@
 # if 'reference.dataset' and 'dataset.other' are not yet specified (depending on upstream 
 # code), define them here (they each need to match one of the 'dataset.names')
 
-dataset.names[1:2]
+dataset.names
 # reference.dataset <- "NeonCTRL" 
 dataset.other <- dataset.names[which(dataset.names != reference.dataset & dataset.names != "Perso")]
 
@@ -1163,17 +1163,17 @@ for(i in 1:length(RESULTS)) {
     # First iteration of loop:
     z <- data.frame(matrix(NA, nrow = nrow(RESULTS[[1]]), ncol = ncol(RESULTS[[1]])))
     colnames(z) <- colnames(RESULTS[[1]])
-    z <- RESULTS[[i]][1:2,]
-    z$Parameter <- rep(param.name, 2)
+    z <- RESULTS[[i]]
+    z$Parameter <- rep(param.name, iter)
     # ... thereafter:
   } else {
     new.part <- RESULTS[[i]] 
-    new.part$Parameter <- rep(param.name, 2)
+    new.part$Parameter <- rep(param.name, iter)
     z <- rbind(z, new.part) 
   }
 }
 z
-z$"Condition" <- rep(dataset.names, nrow(z)/2)
+z$"Condition" <- rep(dataset.names, nrow(z)/iter)
 z <- z[, c("Parameter", 
           "Condition", 
           "Min.", 
