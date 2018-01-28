@@ -37,11 +37,11 @@ dataset.names <- c(
 	)
 
 # Where to save results?
-Loc.save <- "/Users/Lab/Documents/Postdoc/2018_Szeged/TS7_Filopodyan/Materials/Datasets/4a_RESULTS"			# <---- Set saving directory here
+Loc.save <- paste0(dir, "/4a_RESULTS")			# <---- Set saving directory here
 
 # SCRIPTS:
 
-Loc.Modules <- c("/Users/Lab/Documents/Postdoc/2018_Szeged/TS7_Filopodyan/Materials/Scripts_FilopodyanR")
+Loc.Modules <- c("/Users/mlouveaux/Documents/Postdoc/Logistique/Conferences_Missions/Szeged_NEUBIAS_2018/TS7/Vasja/Vasja/Scripts_FilopodyanR")
 scripts <- c("FilopodyanR Module 1.R", "FilopodyanR Module 2.R")
 
 # Run Module 3 to compare filopodium properties?
@@ -85,7 +85,7 @@ FilopodyanR <- function() {
 metalist    <- list()
 objectnames <- list()
 
-for (iter in seq_along(folder.names)) {
+for (iter in 1:2) { #seq_along(folder.names)
 	rm(list = setdiff(ls(), keep))
 
 	# RUN FILOPODYAN MODULES AS A FUNCTION
@@ -100,7 +100,7 @@ for (iter in seq_along(folder.names)) {
 	rm(list = setdiff(ls(), keep))	
 }
 
-names(metalist) <- dataset.names
+names(metalist) <- dataset.names[1:2]
 names(metalist)
 
 ls()
