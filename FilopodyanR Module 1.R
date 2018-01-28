@@ -148,10 +148,10 @@ readID <- function(x) {
 
 Loc <- getwd()
 
-all.names <- list.files(as.character(Loc), pattern = "*Filopodia.txt")
-all.names2 <- list.files(as.character(Loc), pattern = "*Coordinates.txt")
+all.names <- list.files(as.character(Loc), pattern = "*Filopodia")
+all.names2 <- list.files(as.character(Loc), pattern = "*Coordinates")
 if(bg.corr.setting != 0) {
-	all.names3 <- list.files(as.character(Loc), pattern = "*Bodies.txt")
+	all.names3 <- list.files(as.character(Loc), pattern = "*Bodies")
 }
 # all.names; all.names2; all.names3
 
