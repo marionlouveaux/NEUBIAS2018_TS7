@@ -155,6 +155,15 @@ if(bg.corr.setting != 0) {
 }
 # all.names; all.names2; all.names3
 
+if (length(grep(x = all.names, pattern = ".csv")!=0)){
+  separator <- ","
+} else if( length(grep(all.names, pattern = ".txt")) !=0){
+  separator <- "\t"
+}else{
+  warning('What is this format?? .csv with coma separation or .txt with tab separation expected')
+}
+
+
 # Measure max number of rows in any table, important for binding tables later:
 
 n.tables <- length(all.names)
@@ -162,7 +171,7 @@ n.tables
 rows <- vector(mode = "numeric", length = 0)
 
 for (i in seq_along(all.names)) {
-	rows <- append(rows, nrow(read.table(all.names[i], sep = "\t", skip = 1)))
+	rows <- append(rows, nrow(read.table(all.names[i], sep = separator, skip = 1)))
 }
 
 max.t <- max(unlist(rows))
@@ -175,7 +184,7 @@ if (bg.corr.setting != 0) {
 	rows.bodies <- vector(mode = "numeric", length = 0)	
 	for (i in seq_along(all.names3)) {
 		#print(all.names3[i])
-		rows.bodies <- append(rows.bodies, nrow(read.table(all.names3[i], sep = "\t", skip = 1)))
+		rows.bodies <- append(rows.bodies, nrow(read.table(all.names3[i], sep = separator, skip = 1)))
 		#print(rows.bodies[i])
 	}
 	max.t.bodies <- max(unlist(rows.bodies))
@@ -216,7 +225,7 @@ for (i in extract) {
 		header   	   = unlist(strsplit(vec, "\t"))
 		# Important addition for IDing columns:
 		header		   = paste(header, rep(ID, length(header)), sep = "_") 
-		tab      	   = read.table(all.names[i], sep = "\t", skip = 1)
+		tab      	   = read.table(all.names[i], sep = separator, skip = 1)
 		colnames(tab)  = header
 		top.up.rows    = max.t - nrow(tab)
 		top.up.table   = data.frame(matrix(NA, ncol = ncol(tab), 
@@ -239,7 +248,7 @@ tip.table[1:25, 1:9]  # Print top of the table for example filopodium 1.
 
 rows.c <- vector(mode = "numeric", length = 0)  
 for (i in seq_along(all.names2)) {
-	rows.c <- append(rows.c, nrow(read.table(all.names2[i], sep = "\t", skip = 1)))
+	rows.c <- append(rows.c, nrow(read.table(all.names2[i], sep = separator, skip = 1)))
 }
 max.c <- max(rows.c)
 
@@ -250,7 +259,7 @@ for (i in extract) {
 		vec      	   = readLines(all.names2[i])[1]
 		header   	   = unlist(strsplit(vec, "\t"))		
 		header		   = paste(header, rep(ID, length(header)), sep = "_") 
-		tab      	   = read.table(all.names2[i], sep = "\t", skip = 1)
+		tab      	   = read.table(all.names2[i], sep = separator, skip = 1)
 		colnames(tab)  = header
 		top.up.rows    = max.c - nrow(tab)
 		top.up.table   = data.frame(matrix(NA, ncol = ncol(tab),  
@@ -295,7 +304,7 @@ if(exists("all.names3")) {
 		header   	   = unlist(strsplit(vec, "\t"))
 		header		   = paste(header, rep(ID, length(header)), sep = "_") ; 
 		
-		tab      	   = read.table(all.names3[i], sep = "\t", skip = 1)
+		tab      	   = read.table(all.names3[i], sep = separator, skip = 1)
 		top.up.rows	   = max.t.bodies - nrow(tab)
 		top.up.table   = data.frame(matrix(NA, ncol = ncol(tab), 
 						nrow = top.up.rows))
