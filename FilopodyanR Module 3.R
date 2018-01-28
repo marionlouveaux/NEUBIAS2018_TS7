@@ -36,7 +36,7 @@
 
 dataset.names[1:2]
 # reference.dataset <- "NeonCTRL" 
-dataset.other <- dataset.names[which(dataset.names != reference.dataset && dataset.names != "Perso")]
+dataset.other <- dataset.names[which(dataset.names != reference.dataset & dataset.names != "Perso")]
 
 if(!exists("plot.boxCDFs")) {
 	plot.boxCDFs  = TRUE
@@ -1157,12 +1157,13 @@ names(RESULTS) = names(results.list)
 rm(z)
 for(i in 1:length(RESULTS)) {
   param.name = names(RESULTS)[i] 
+
   if(i == 1) {
 
     # First iteration of loop:
     z <- data.frame(matrix(NA, nrow = nrow(RESULTS[[1]]), ncol = ncol(RESULTS[[1]])))
     colnames(z) <- colnames(RESULTS[[1]])
-    z <- RESULTS[[i]]
+    z <- RESULTS[[i]][1:2,]
     z$Parameter <- rep(param.name, 2)
     # ... thereafter:
   } else {
