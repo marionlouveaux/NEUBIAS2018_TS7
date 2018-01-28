@@ -92,27 +92,31 @@ nor.tip.setting <- "nor.tip.to.body"
 # For automated scripted input of multiple folders (edit in parent script):
 
 module.name <- "FilopodyanR Module1.R"
-initiate <- function() {
+# initiate <- function() {
+# 
+# 	if (exists("iter") == FALSE) {
+# 		stop("Please define source folders in parent script.")
+# 	} else { 
+# 
+# 		if(iter == 1) { ### Need to do something with iter -- only 2 iterations possible (e.g. two folders, would be nice to be able to have more)
+# 			setwd(folder.names[1])
+# 			print(module.name)
+# 			print("EXECUTING ON:")
+# 			print(folder.names[1])
+# 		} else if(iter == 2) {
+# 			setwd(folder.names[2])
+# 			print(module.name)
+# 			print("EXECUTING ON:")
+# 			print(folder.names[2])
+# 		} else print("Error: iter OUT OF RANGE, folders not defined. Get some fresh air. Make more folder names in parent script.")
+# 	}
+# }
+# 
+# initiate()
 
-	if (exists("iter") == FALSE) {
-		stop("Please define source folders in parent script.")
-	} else { 
 
-		if(iter == 1) { ### Need to do something with iter -- only 2 iterations possible (e.g. two folders, would be nice to be able to have more)
-			setwd(folder.names[1])
-			print(module.name)
-			print("EXECUTING ON:")
-			print(folder.names[1])
-		} else if(iter == 2) {
-			setwd(folder.names[2])
-			print(module.name)
-			print("EXECUTING ON:")
-			print(folder.names[2])
-		} else print("Error: iter OUT OF RANGE, folders not defined. Get some fresh air. Make more folder names in parent script.")
-	}
-}
-
-initiate()
+print(folder.names[iter])
+setwd(folder.names[iter])
 
 getwd()
 list.files()
