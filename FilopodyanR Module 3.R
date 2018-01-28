@@ -34,9 +34,9 @@
 # if 'reference.dataset' and 'dataset.other' are not yet specified (depending on upstream 
 # code), define them here (they each need to match one of the 'dataset.names')
 
-dataset.names
+dataset.names[1:2]
 # reference.dataset <- "NeonCTRL" 
-dataset.other <- dataset.names[which(dataset.names != reference.dataset)]
+dataset.other <- dataset.names[which(dataset.names != reference.dataset && dataset.names != "Perso")]
 
 if(!exists("plot.boxCDFs")) {
 	plot.boxCDFs  = TRUE
