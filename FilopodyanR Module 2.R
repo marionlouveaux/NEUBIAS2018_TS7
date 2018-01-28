@@ -6,7 +6,7 @@
 # - Median tip extension rate (DCTM +)  :	med.rate.extens
 # - Median tip retraction rate (DCTM -) :	med.rate.retract
 # - Median base invasion (DCBM +)		:	med.base.invas
-# - Median base retraction (DCBM -)		: 	med.base.retract
+# - Median base retraction (DCBM -)		: 	med.base.retract
 # - Consistency of growth (the root of ACF) 
 #										:	acf.fdctm.roots
 # - Initial DCTM (new filo only)		:	dctm99.new.early.mean / .med
@@ -32,16 +32,16 @@ DrawErrorAsPolygon <- function(x, y1, y2, tt, col = 'grey') {
 
 
 
-# FILE MANAGEMENT:	
-# Set the folders containing the data. See parent script 
-# ("BounderR-structuresmanagement.R") for script input of multiple folders.
+# FILE MANAGEMENT:	
+# Set the folders containing the data. See parent script 
+# ("BounderR-structuresmanagement.R") for script input of multiple folders.
 
-# For manual input (single folder to analyse):
+# For manual input (single folder to analyse):
 
-# setwd("")  #  <---- Set the directory filename containing your data and uncomment.
+# setwd("")  #  <---- Set the directory filename containing your data and uncomment.
 # e.g. setwd("/Users/Lab/Documents/Postdoc/ANALYSIS_local-files/TOTAL-ANALYSIS_RENYI2-6_ED4") 
 
-# For automated scripted input of multiple folders (edit in parent script):
+# For automated scripted input of multiple folders (edit in parent script):
 
 module.name <- "FilopodyanR Module2.R"
 initiate <- function() {
@@ -70,7 +70,7 @@ getwd()
 list.files()
 
 #-------------------------------------------------------------------------------
-# Max length
+# Max length
 
 
 head(all.length)
@@ -87,8 +87,8 @@ if(draw.plots == TRUE) {
 }
 
 #-------------------------------------------------------------------------------
-# Tip extension and rectraction rates (median per filopodium)
-# Altered from original (added MedianOfExtending etc.) on 15.3.2017
+# Tip extension and rectraction rates (median per filopodium)
+# Altered from original (added MedianOfExtending etc.) on 15.3.2017
 
 pxw <- pxw  # USER-DEFINED AT TOP OF SCRIPT
 
@@ -114,8 +114,8 @@ MedianOfRetracting <- function(x) {
 med.rate.dctm.plus <- apply(all.dctm99, 2, MedianOfPositive)
 med.rate.dctm.minus <- apply(all.dctm99, 2, MedianOfNegative) 
 
-med.rate.extens <- apply(all.fdctm, 2, MedianOfExtending)  # COMES FROM FDCTM!
-med.rate.retract <- apply(all.fdctm, 2, MedianOfRetracting) # COMES FROM FDCTM!
+med.rate.extens <- apply(all.fdctm, 2, MedianOfExtending)  # COMES FROM FDCTM!
+med.rate.retract <- apply(all.fdctm, 2, MedianOfRetracting) # COMES FROM FDCTM!
 
 
 if( draw.plots == TRUE) {
@@ -131,13 +131,13 @@ dev.new()
 		xlab = expression("Median dB (< 0) [" * mu * "m / 2 s]") )
 }
 
-# Base invasion and rectraction rates (median per filopodium)
+# Base invasion and rectraction rates (median per filopodium)
 
-med.fdcbm.invas <- apply(all.fdcbm, 2, MedianOfExtending)  # 
+med.fdcbm.invas <- apply(all.fdcbm, 2, MedianOfExtending)  # 
 med.fdcbm.retract <- apply(all.fdcbm, 2, MedianOfRetracting) #
 
-# med.dB.invas <- apply(all.dB99, 2, MedianOfPositive)
-# med.dB.retract <- apply(all.dB99, 2, MedianOfNegative) 
+# med.dB.invas <- apply(all.dB99, 2, MedianOfPositive)
+# med.dB.retract <- apply(all.dB99, 2, MedianOfNegative) 
 
 
 if( draw.plots == TRUE) {
@@ -157,7 +157,7 @@ dev.new()
 
 
 #-------------------------------------------------------------------------------
-# Consistency of growth (DCTM ACF roots)
+# Consistency of growth (DCTM ACF roots)
 
 dctm <- all.dctm99
 
@@ -175,13 +175,13 @@ AcfTable <- function(x, L) {
 }
 acf.dctm <- AcfTable(dctm, 120) 
 
-# Extract first negative in column (the more strongly correlated the timepoints, the longer it takes for ACF to decay to 0; the offset of decay to 0 is taken as a measure of growth consistency ["ACF (DCTM) crosspoint")]
+# Extract first negative in column (the more strongly correlated the timepoints, the longer it takes for ACF to decay to 0; the offset of decay to 0 is taken as a measure of growth consistency ["ACF (DCTM) crosspoint")]
 
 FirstNegative <- function(x) {
 	if(sum(!is.na(x)) > 0) {				
-		min (which(x <= 0), na.rm = TRUE)	# requires at least one non-NA value in vector (if >3 elements in dctm column acf is not computed, so acf is NA throughout, which returns Inf) 
+		min (which(x <= 0), na.rm = TRUE)	# requires at least one non-NA value in vector (if >3 elements in dctm column acf is not computed, so acf is NA throughout, which returns Inf) 
 	} else {
-		NA									# returns NA in place of Inf
+		NA									# returns NA in place of Inf
 	}
 }
 
@@ -192,20 +192,20 @@ if( draw.plots == TRUE) {
 }
 acf.dctm.roots 
 
-# Repeat for fdctm:  (added in this script on 15.3.2017, from correlations script)
+# Repeat for fdctm:  (added in this script on 15.3.2017, from correlations script)
 acf.fdctm <- AcfTable(all.fdctm, 120)
 acf.fdctm.roots <- apply (acf.fdctm, 2, FirstNegative)
 
 
 #-------------------------------------------------------------------------------
-# Extracting new vs pre-existing filopodia: 
+# Extracting new vs pre-existing filopodia: 
 
 # Old definition (superseded by newer min.T code below):
 	# min.dT <- apply(all.dT, 2, min, na.rm=TRUE)
 	# new <- which(min.dT < 0)
 	# exist <- which(min.dT >= 0)
 
-# New (changed 15.3.2017):
+# New (changed 15.3.2017):
 
 min.T <- apply(all.T, 2, min, na.rm=TRUE)
 new <- which(min.T > 1)
@@ -213,20 +213,20 @@ exist <- which(min.T == 1)
 
 # Add from.short filter:
 
-cutoff = 2  #  <- Set cutoff in um for how short a filopodium needs to be in its first 
-# timepoint in order to qualify as a new filopodium
+cutoff = 2  #  <- Set cutoff in um for how short a filopodium needs to be in its first 
+# timepoint in order to qualify as a new filopodium
 
 from.short <- which(all.length[bb+1, ] < cutoff)
-new.from.short <- which((min.T > 1) & (all.length[bb+1, ] < cutoff))   # Filopodia that come into existence, and <2um at t1
-non.new.from.short <- which((!min.T > 1) | (!all.length[bb+1, ] < cutoff))  # Filo pre-existing or appearing into focus
+new.from.short <- which((min.T > 1) & (all.length[bb+1, ] < cutoff))   # Filopodia that come into existence, and <2um at t1
+non.new.from.short <- which((!min.T > 1) | (!all.length[bb+1, ] < cutoff))  # Filo pre-existing or appearing into focus
 
-from.short.cutoff <- cutoff; rm(cutoff)  # (for transparency of workspace)
+from.short.cutoff <- cutoff; rm(cutoff)  # (for transparency of workspace)
 
 #-------------------------------------------------------------------------------
-# Initial DCTM and DCBM [over nt (10) timepoints] for new filopodia
+# Initial DCTM and DCBM [over nt (10) timepoints] for new filopodia
 
-nt <- 10  # Number of timepoints of interest post-formation
-bb  # Base backprojections (variable defined in Module 1)
+nt <- 10  # Number of timepoints of interest post-formation
+bb  # Base backprojections (variable defined in Module 1)
 early <- (bb+1):(bb+1+nt); early  # vector of the timepoints required in this section 
 
 
@@ -274,19 +274,19 @@ if( draw.plots == TRUE) {
 		abline(v = 0, col = 'red', lty = 3)	
 }
 
-# as above, reformatted (so as to include NA for non-new filopodia):
-# (comment 15.3.2017: code for 'med.xxx.initial' copied from '2017-02-16_TOTAL-
-# CTRL_Correlations', verify anew in this context!)
+# as above, reformatted (so as to include NA for non-new filopodia):
+# (comment 15.3.2017: code for 'med.xxx.initial' copied from '2017-02-16_TOTAL-
+# CTRL_Correlations', verify anew in this context!)
 
 med.fdctm.initial <- apply(all.fdctm[early, ], 2, median, na.rm = TRUE); med.fdctm.initial[non.new.from.short] <- NA
 med.fdcbm.initial <- apply(all.fdcbm[early, ], 2, median, na.rm = TRUE); med.fdcbm.initial[non.new.from.short] <- NA
 med.fdB.initial <- apply(all.fdB[early, ], 2, median, na.rm = TRUE); med.fdB.initial[non.new.from.short] <- NA
 
 #-------------------------------------------------------------------------------
-# Straightness of filopodia:
+# Straightness of filopodia:
 
-# 1. Calculate euclidean distance from Base(X,Y) to Tip (X,Y)
-# 2. straightness = euclidean distance / length 
+# 1. Calculate euclidean distance from Base(X,Y) to Tip (X,Y)
+# 2. straightness = euclidean distance / length 
 
 X.bases <- coord.table [, grep(pattern = c("Base X" ), x = names(coord.table), 
   value = FALSE, fixed = TRUE)]
@@ -306,8 +306,8 @@ straightness.mean <- apply(all.straightness, 2, mean, na.rm = TRUE)
 waviness.mean     <- apply(all.waviness, 2, mean, na.rm = TRUE)
 length.mean       <- apply(all.length, 2, mean, na.rm = TRUE)
 
-# CLEANUP required: straightness is not linear, strongly correlates with length up until 5 um  (artifact of the computation method). Solution: use only straightness at max length, for filopodia who reach max length over 5 um.
-# (Added on 15.3.2017, code reused from 'Dataset1_CTRL2-6_Modules1-2_Manual.R' in '2017-02-16_TOTAL-CTRL_Correlations')
+# CLEANUP required: straightness is not linear, strongly correlates with length up until 5 um  (artifact of the computation method). Solution: use only straightness at max length, for filopodia who reach max length over 5 um.
+# (Added on 15.3.2017, code reused from 'Dataset1_CTRL2-6_Modules1-2_Manual.R' in '2017-02-16_TOTAL-CTRL_Correlations')
 
 max.lengths <- apply(all.length, 2, max, na.rm = TRUE)
 
@@ -327,7 +327,7 @@ for(i in seq_along(colnames(all.straightness))) {
 
 straightness.at.max.over5 <- straightness.at.max; straightness.at.max.over5[which(max.lengths < 5)] <- NA 
 
-# Plotting:
+# Plotting:
 # matplot(max.lengths, straightness.at.max, type = "p", pch = 16)
 # matplot(max.lengths, straightness.mean, type = "p", pch = 16)
 # abline(v = 4, col = "red")
@@ -335,7 +335,7 @@ straightness.at.max.over5 <- straightness.at.max; straightness.at.max.over5[whic
         # ylim = c(0,2), xlim = c(5,18))
     # abline(h = 1, lty = 3, col = 'grey')
 # matplot(max.lengths, straightness.at.max.over5, type = "p", pch = 16)
-# data.frame(all.length[, 4], all.straightness[, 4], all.euclid[, 4], X.bases[, 4])
+# data.frame(all.length[, 4], all.straightness[, 4], all.euclid[, 4], X.bases[, 4])
 
 if( draw.plots == TRUE) {
 	dev.new()
@@ -361,7 +361,7 @@ if( draw.plots == TRUE) {
 # Time Extending, Time Retracting, Time Stalling
 
 
-# TipState function. i) Absolute (number of timepoints in each state)
+# TipState function. i) Absolute (number of timepoints in each state)
 
 TipState.Abs <- function(x) {
 	tip.state <- cut(x,
@@ -370,7 +370,7 @@ TipState.Abs <- function(x) {
 	retrun(summary(tip.state))	
 }
 
-# TipState function. ii) Relative (proportion of time in each state)
+# TipState function. ii) Relative (proportion of time in each state)
 
 TipState.Rel <- function(x) {
 	tip.state <- cut(x,
@@ -387,14 +387,14 @@ all.time.retr  <- all.tip.states["Retr", ]
 
 
 #---------------------
-# Base: Time Invading, Time Retracting, Time Stable  # ADDED ON 15.3.2017
+# Base: Time Invading, Time Retracting, Time Stable  # ADDED ON 15.3.2017
 
 pxw <- pxw  # USER-DEFINED AT TOP OF SCRIPT
 
 threshold.inv.per.t = pxw
 threshold.retr.per.t = -pxw
 
-# BaseState function. i) Absolute (number of timepoints in each state)
+# BaseState function. i) Absolute (number of timepoints in each state)
 
 BaseState.Abs <- function(x) {
 	base.state <- cut(x,
@@ -403,7 +403,7 @@ BaseState.Abs <- function(x) {
 	retrun(summary(base.state))	
 }
 
-# BaseState function. ii) Relative (proportion of time in each state)
+# BaseState function. ii) Relative (proportion of time in each state)
 
 BaseState.Rel <- function(x) {
 	base.state <- cut(x,

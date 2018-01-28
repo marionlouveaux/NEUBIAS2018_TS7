@@ -1,41 +1,41 @@
-### FilopodyanR Module 3: 
+### FilopodyanR Module 3: 
 
-# Plotting of descriptive metrics (across different conditions).
+# Plotting of descriptive metrics (across different conditions).
 
-# 3A: Plots box plots and CDFs for filopodium stats: 
+# 3A: Plots box plots and CDFs for filopodium stats: 
 	
-	# Median tip extension rate	
-	# Median tip retraction rate
-	# Median base invasion rate
-	# Median base retraction rate
-	# Initial tip movement (new filo)
-	# Initial base movement (new filo)
-	# Max Length
-	# Straightness at max length
-	# Tip persistence	 	
-	# Time spent extending
-	# Time spent retracting
-	# Time spent stalling	
+	# Median tip extension rate	
+	# Median tip retraction rate
+	# Median base invasion rate
+	# Median base retraction rate
+	# Initial tip movement (new filo)
+	# Initial base movement (new filo)
+	# Max Length
+	# Straightness at max length
+	# Tip persistence	 	
+	# Time spent extending
+	# Time spent retracting
+	# Time spent stalling	
 		
-# 3B: Timecourse graphs:
+# 3B: Timecourse graphs:
 
-	# Length over time (new filo)
-	# DCTM over time (new filo)
-	# dB over time (new filo)
+	# Length over time (new filo)
+	# DCTM over time (new filo)
+	# dB over time (new filo)
 
 #------------------------------------------------------------------------------------------	
-# IF NOT CALLING THIS SCRIPT FROM MASTERSCRIPT: LOAD DATA:
+# IF NOT CALLING THIS SCRIPT FROM MASTERSCRIPT: LOAD DATA:
 	
-# load("/Users/Lab/Documents/Postdoc/ANALYSIS_local-files/ANALYSIS LOGS/2017-02-15_s18_VASP_Phenotype/LastWorkspace_VASP-phenotype.Rdata")
+# load("/Users/Lab/Documents/Postdoc/ANALYSIS_local-files/ANALYSIS LOGS/2017-02-15_s18_VASP_Phenotype/LastWorkspace_VASP-phenotype.Rdata")
 
-# rm(list = ls())
-# load('~/Documents/Postdoc/ANALYSIS_local-files/ANALYSIS LOGS/2017-04_s18_VASP_Phenotype/ANALYSIS_VASP-v-CTRL_Renyi2-6_ed4_MANUAL/LastWorkspace_Phenotype.Rdata')
+# rm(list = ls())
+# load('~/Documents/Postdoc/ANALYSIS_local-files/ANALYSIS LOGS/2017-04_s18_VASP_Phenotype/ANALYSIS_VASP-v-CTRL_Renyi2-6_ed4_MANUAL/LastWorkspace_Phenotype.Rdata')
 
-# if 'reference.dataset' and 'dataset.other' are not yet specified (depending on upstream 
-# code), define them here (they each need to match one of the 'dataset.names')
+# if 'reference.dataset' and 'dataset.other' are not yet specified (depending on upstream 
+# code), define them here (they each need to match one of the 'dataset.names')
 
 dataset.names
-# reference.dataset <- "NeonCTRL" 
+# reference.dataset <- "NeonCTRL" 
 dataset.other <- dataset.names[which(dataset.names != reference.dataset)]
 
 if(!exists("plot.boxCDFs")) {
@@ -46,9 +46,9 @@ if(!exists("plot.boxCDFs")) {
 }
 
 #------------------------------------------------------------------------------------------
-# Dependencies: 
+# Dependencies: 
 
-# Packages:
+# Packages:
 
 library(purrr)
 library(yarrr)
@@ -57,14 +57,14 @@ library(gplots)
 library(RColorBrewer)
 library(effsize)
 
-# Modules:
+# Modules:
 
-setwd(Loc.Modules)  # <---- Set current working directory to the folder where 
+setwd(Loc.Modules)  # <---- Set current working directory to the folder where 
 					#		analysis scripts are located (correct this if needed)
 					
 source("GraphingTemplates.R")
 
-# Functions:
+# Functions:
 
 Count <- function(x) length(x[!is.na(x)])			 
 SE <- function(x) sd(x, na.rm=TRUE)/sqrt(Count(x))	 							
@@ -83,11 +83,11 @@ spt <- metalist[[1]]$spt
 #------------------------------------------------------------------------------
 #------------------------------------------------------------------------------
 #------------------------------------------------------------------------------
-# Module 3A: Plot Box plots and CDFs (saves to folder.names[1])
+# Module 3A: Plot Box plots and CDFs (saves to folder.names[1])
 
 if(plot.boxCDFs == TRUE) {
 
-# Med. extension rate
+# Med. extension rate
 
 dev.new()
 par(mfrow = c(2,2))
@@ -108,7 +108,7 @@ rm(x1, curr.data)
 
 
 #------------------------------------------------------------------------------
-# Med. retraction rate
+# Med. retraction rate
 
 x1 <- "med.rate.retract"
 
@@ -131,7 +131,7 @@ dev.copy(pdf, "Rplot_BoxCDF_Parameters_01.pdf",
 	dev.off()
 
 #------------------------------------------------------------------------------
-# Med base invasion
+# Med base invasion
 
 dev.new()
 par(mfrow = c(2,2))
@@ -151,7 +151,7 @@ CdfPlot2(x1, adjust.spt = "divide",
 rm(x1, curr.data)
 
 #------------------------------------------------------------------------------
-# Med base retraction
+# Med base retraction
 
 x1 <- "med.fdcbm.retract"
 
@@ -173,7 +173,7 @@ dev.copy(pdf, "Rplot_BoxCDF_Parameters_02.pdf",
 	dev.off()
 
 # # #------------------------------------------------------------------------------
-# # Initial DCTM
+# # Initial DCTM
 
 dev.new()
 
@@ -194,7 +194,7 @@ CdfPlot2(x1, adjust.spt = "divide",
 rm(x1, curr.data)
 
 # #------------------------------------------------------------------------------
-# # Initial DCBM
+# # Initial DCBM
 
 x1 <- "dcbm99.new.early.med"
 
@@ -229,8 +229,8 @@ dev.copy(pdf, "Rplot_BoxCDF_Parameters_03.pdf",
 # y2 <- metalist[[2]]$"dcbm99.new.early.med"
 
 
-# # # curr.data.X <- StandardGraphInput(x1); curr.data.X
-# # # curr.data.Y <- StandardGraphInput(y1); curr.data.Y
+# # # curr.data.X <- StandardGraphInput(x1); curr.data.X
+# # # curr.data.Y <- StandardGraphInput(y1); curr.data.Y
 
 # # curr.cols$v 
 # c1 <- c(curr.cols[, 1], 0.5)
@@ -251,7 +251,7 @@ dev.copy(pdf, "Rplot_BoxCDF_Parameters_03.pdf",
 # points(x2, y2, type = "p", pch = 16, col = rgb(c2[1], c2[2], c2[3], 0.5))
 
 #------------------------------------------------------------------------------
-# Max length
+# Max length
 
 dev.new()
 par(mfrow = c(2, 2))
@@ -271,7 +271,7 @@ CdfPlot2(x1,
 rm(x1, curr.data)
 
 #------------------------------------------------------------------------------
-# Waviness
+# Waviness
 
 x1 <- "straightness.at.max.over5"
 
@@ -294,7 +294,7 @@ dev.copy(pdf, "Rplot_BoxCDF_Parameters_04.pdf",
 	dev.off()
 
 #------------------------------------------------------------------------------
-# ACF DCTM roots
+# ACF DCTM roots
 
 dev.new()
 par(mfrow = c(2, 2))
@@ -312,14 +312,14 @@ CdfPlot2(x1, adjust.spt = "multiply",
 	curr.Xlab = "Time [s]") 
 
 #------------------------------------------------------------------------------
-# ACF DCTM decay
+# ACF DCTM decay
 
-max.L <- nrow(metalist[[1]]$acf.dctm)  # local variable (only this section)
+max.L <- nrow(metalist[[1]]$acf.dctm)  # local variable (only this section)
 acf.offset <- 1:max.L	# local
 
-acf.dctm1.means <- apply(metalist[[1]]$acf.dctm, 1, mean, na.rm = TRUE)  # local
-acf.dctm2.means <- apply(metalist[[2]]$acf.dctm, 1, mean, na.rm = TRUE)  # local
-acf.dctm1.ci <- apply(metalist[[1]]$acf.dctm, 1, CI)  # local
+acf.dctm1.means <- apply(metalist[[1]]$acf.dctm, 1, mean, na.rm = TRUE)  # local
+acf.dctm2.means <- apply(metalist[[2]]$acf.dctm, 1, mean, na.rm = TRUE)  # local
+acf.dctm1.ci <- apply(metalist[[1]]$acf.dctm, 1, CI)  # local
 acf.dctm2.ci <- apply(metalist[[2]]$acf.dctm, 1, CI)  # local
 
 n1 <- ncol(metalist[[1]]$acf.dctm)
@@ -327,7 +327,7 @@ n2 <- ncol(metalist[[2]]$acf.dctm)
 
 metalist[[1]]$acf.dctm[1:10, 1:10]
 
-# Plot autocorrelation function for DCTM:
+# Plot autocorrelation function for DCTM:
 
 	matplot(acf.offset, acf.dctm1.means, 
 		ylab = "ACF",
@@ -345,7 +345,7 @@ metalist[[1]]$acf.dctm[1:10, 1:10]
 		col = rgb(t(curr.cols[2]))
 		)
 		
-	# Draw error range for dataset1
+	# Draw error range for dataset1
 	ci.hi1 = acf.dctm1.means + acf.dctm1.ci
 	ci.lo1 = acf.dctm1.means - acf.dctm1.ci
 	
@@ -377,7 +377,7 @@ dev.copy(pdf, "Rplot_BoxCDF_Parameters_05.pdf",
 	dev.off()
 
 #------------------------------------------------------------------------------
-# Time spent extending
+# Time spent extending
 
 dev.new()
 par(mfrow = c(3, 2))
@@ -396,7 +396,7 @@ CdfPlot2(x1,
 	)
 
 #------------------------------------------------------------------------------
-# Time spent retracting
+# Time spent retracting
 
 x1 <- "all.time.retr"
 
@@ -412,7 +412,7 @@ CdfPlot2(x1,
 	)
 
  #------------------------------------------------------------------------------
-# Time spent stalling
+# Time spent stalling
 
 x1 <- "all.time.stall"
 
@@ -433,10 +433,10 @@ dev.copy(pdf, "Rplot_BoxCDF_Parameters_06.pdf",
 	dev.off()
 
 
-# PLOT BASE MOVEMEMENT breakdown by time (ADDED 15.03.2017)
+# PLOT BASE MOVEMEMENT breakdown by time (ADDED 15.03.2017)
 
 #------------------------------------------------------------------------------
-# Time base invading
+# Time base invading
 
 dev.new()
 par(mfrow = c(3, 2))
@@ -455,7 +455,7 @@ CdfPlot2(x1,
 	)
 
 #------------------------------------------------------------------------------
-# Time base retracting
+# Time base retracting
 
 x1 <- "all.time.base.retr"
 
@@ -471,7 +471,7 @@ CdfPlot2(x1,
 	)
 
  #------------------------------------------------------------------------------
-# Time base stable
+# Time base stable
 
 x1 <- "all.time.base.stable"
 
@@ -492,14 +492,14 @@ dev.copy(pdf, "Rplot_BoxCDF_Parameters_07.pdf",
 	dev.off()
 graphics.off()
 
-}  # Plot all box plots and CDFs per parameter
+}  # Plot all box plots and CDFs per parameter
 
- 
+ 
 
 #------------------------------------------------------------------------------
 #------------------------------------------------------------------------------
 #------------------------------------------------------------------------------
-# Module 3B: Timecourse graphs
+# Module 3B: Timecourse graphs
 
 if(plot.timecourse == TRUE) {
 
@@ -533,7 +533,7 @@ if(plot.timecourse == TRUE) {
 	# problem: some of those newly in existence start off very long already!
 	from.short <- which(new.lengths[21, ] < 2)
 	
-	# reassign the above accordingly: 
+	# reassign the above accordingly: 
 	
 	mean.new.lengths <- apply(new.lengths[, from.short], 1, mean, na.rm = TRUE)
 	mean.new.dctm    <- apply(new.dctm[, from.short], 1, mean, na.rm = TRUE)
@@ -544,7 +544,7 @@ if(plot.timecourse == TRUE) {
 	ci.new.dB       <-  apply(new.dB[, from.short], 1, CI) 
 	
 	#------------------------------------------------------------------------------
-	# 3B.i --- Plotting LENGTHS timecourse:
+	# 3B.i --- Plotting LENGTHS timecourse:
 	
 	dev.new()
 	par(mfrow = c(2,2))
@@ -569,10 +569,10 @@ if(plot.timecourse == TRUE) {
 	
 	abline(h = 0, col = "black", lty = 3)
 	
-	# head(new.lengths[20:26, ])
+	# head(new.lengths[20:26, ])
 	
 	
-	# 3B.ii --- Plotting DCTM timecourse:
+	# 3B.ii --- Plotting DCTM timecourse:
 	
 	
 	matplot(new.dS[, from.short], new.dctm[, from.short],
@@ -597,7 +597,7 @@ if(plot.timecourse == TRUE) {
 	abline(h = 0, col = "black", lty = 3)
 	
 	
-	# 3B.iii --- Plotting DB timecourse:
+	# 3B.iii --- Plotting DB timecourse:
 	
 	matplot(new.dS[, from.short], new.dB[, from.short],
 	#	add = TRUE,
@@ -620,15 +620,15 @@ if(plot.timecourse == TRUE) {
 	DrawErrorAsPolygon(dS.vector, ci.hi, ci.lo, tt = 1:120, col = "#FFB26640")
 	
 	abline(h = 0, col = "black", lty = 3)
-}  # Plot timecourse (for now only dataset 1)
+}  # Plot timecourse (for now only dataset 1)
 
 
 #------------------------------------------------------------------------------
 #------------------------------------------------------------------------------
 #------------------------------------------------------------------------------
-# Module 3C: Summary of phenotype 
+# Module 3C: Summary of phenotype 
 
-# P values and adjustment:
+# P values and adjustment:
 spt= metalist[[1]]$spt
 tidy_max.lengths 	<- StandardGraphInput("max.lengths") 
 tidy_straightness.at.max.over5 <- StandardGraphInput("straightness.at.max.over5") 
@@ -745,7 +745,7 @@ myquant_abbrev <- list(
 			# # tidy_mean.f.tip
 )
 
-# Check all are there:
+# Check all are there:
 lapply(myquant, function(x) dim(x))
 
 # Check matching:
@@ -754,7 +754,7 @@ data.frame("Parameter code" = myquantnames, "Full name" = myquant_fullnames, "Ab
 names(myquant) <- myquant_fullnames
 
 #-------------------------------------------------------------------------------
-# Adjusted P-values: 
+# Adjusted P-values: 
 
 for(i in 1:length(myquant)) {
 	stopifnot(length(myquant) > 0)
@@ -781,7 +781,7 @@ setwd(Loc.save)
 write.csv(adjusted.p.values, "Adjusted-p.csv")
 
 #-------------------------------------------------------------------------------
-# Compute z scores
+# Compute z scores
 
 FindZScore <- function(x1, x2) {
 	mean.x1 <- mean(x1, na.rm = TRUE)
@@ -791,8 +791,8 @@ FindZScore <- function(x1, x2) {
 	
 	z1 <- (mean.x2 - mean.x1) / sd.x1
 	z2 <- (mean.x1 - mean.x2) / sd.x2
-	return(c(z1, z2))  # z1 expresses change of dataset2 compared to dataset1
-						# z2 expresses change of dataset1 compared to dataset2
+	return(c(z1, z2))  # z1 expresses change of dataset2 compared to dataset1
+						# z2 expresses change of dataset1 compared to dataset2
 }
 
 FindZScores <- function(x) {
@@ -802,8 +802,8 @@ FindZScores <- function(x) {
 	mean.x2 <- mean(x2, na.rm = TRUE)	
 	sd.x1 <- sd(x1, na.rm = TRUE)
 	sd.x2 <- sd(x2, na.rm = TRUE)
-	z1 <- (mean.x2 - mean.x1) / sd.x1  # z1 expresses change of 'other'dataset relative to 'reference'
-	z2 <- (mean.x1 - mean.x2) / sd.x2  # z2 is vice versa
+	z1 <- (mean.x2 - mean.x1) / sd.x1  # z1 expresses change of 'other'dataset relative to 'reference'
+	z2 <- (mean.x1 - mean.x2) / sd.x2  # z2 is vice versa
 	z <- c(z1, z2)
 	names(z) <- c(paste(dataset.other, "vs", reference.dataset),
 				  paste(reference.dataset, "vs", dataset.other)
@@ -816,11 +816,11 @@ names(z.scores) <- names(myquant)
 z.scores
 
 #-------------------------------------------------------------------------------
-# Compute Cliff's delta:
+# Compute Cliff's delta:
 
-# delta.scores <- lapply(myquant, function(x) cliff.delta(Value ~ Source, data = x)$estimate) 
-# cohen.scores <- lapply(myquant, function(x) {cohen.d(formula = Value ~ Source, data = x)$estimate})
-# these two above would mess up the sign (+ v -) dep. on the names of datasets (alphabetically)
+# delta.scores <- lapply(myquant, function(x) cliff.delta(Value ~ Source, data = x)$estimate) 
+# cohen.scores <- lapply(myquant, function(x) {cohen.d(formula = Value ~ Source, data = x)$estimate})
+# these two above would mess up the sign (+ v -) dep. on the names of datasets (alphabetically)
 
 stopifnot(exists("reference.dataset"))
 stopifnot(exists("dataset.other"))
@@ -837,7 +837,7 @@ delta.matrix <- matrix(NA, nrow = 2, ncol = length(myquant))
 
 
 #-------------------------------------------------------------------------------
-# SUMMARY PLOTS
+# SUMMARY PLOTS
 
 if(plot.summary == TRUE) {
 library(RColorBrewer)
@@ -847,29 +847,29 @@ scale.edges = c(-1, 1)
 scale.breaks <- seq(scale.edges[1], scale.edges[2], length.out = length(curr.pal)+1)
 
 #-------------------------------
-# PLOT CLIFF'S DELTA AS HEATMAP:
+# PLOT CLIFF'S DELTA AS HEATMAP:
 
 # dev.new(width =7, height = 3.5)
 # heatmap.2(delta.matrix, 
-	# # Switch off reordering and dendrograms:
+	# # Switch off reordering and dendrograms:
       # Colv = FALSE, Rowv = FALSE, dendrogram = "none", 
       # breaks = scale.breaks,
       # symkey = F,
-    # # Switch off other bells and whistles:
+    # # Switch off other bells and whistles:
       # trace = "none",
-    # # Color:
+    # # Color:
       # col = curr.pal,
-    # # Separation:
+    # # Separation:
       # colsep = c(1:23),  #rowsep = c(1:23),
       # sepcol = "white", sepwidth = c(0.0, 0.02),
-    # # Legend: 
+    # # Legend: 
       # keysize = 2, density.info = "none", key.title = "",
       # key.xlab = "Effect size",
-    # # Labels:
-      # labRow = "", # dataset.names[c(2,1)], 
+    # # Labels:
+      # labRow = "", # dataset.names[c(2,1)], 
       # cexRow = 1, cexCol = 0.8,
       # srtCol = 45
-    # # Layout:
+    # # Layout:
     # # Note within cells:
     # # cellnote = rep(as.character(1:23), 2)
 # )
@@ -880,9 +880,9 @@ scale.breaks <- seq(scale.edges[1], scale.edges[2], length.out = length(curr.pal
 	
 	
 #------------------------------------------------------------------------------
-# PIRATEPLOTS (PHENOTYPE SUMMARY PLOTS):
+# PIRATEPLOTS (PHENOTYPE SUMMARY PLOTS):
 
-# 1. Normalise all data:
+# 1. Normalise all data:
 
 ScaleToRef <- function(x, reference.dataset) {
 	
@@ -917,9 +917,9 @@ myquant.other2 <- lapply(myquant.scaled_2, function(x) subset(x, subset = (x$Sou
 
 CombineAllParameters <- function(myquant.list, column) {
 	
-	# LIST -> DATAFRAME (column per parameter)
-	# Takes list (such as myquant.ref or myquant.other) and combines all lists dataframes into dataframe columns, 
-	# with its column title specified by names(list)
+	# LIST -> DATAFRAME (column per parameter)
+	# Takes list (such as myquant.ref or myquant.other) and combines all lists dataframes into dataframe columns, 
+	# with its column title specified by names(list)
 	
 	z <- data.frame(matrix(NA, ncol = length(myquant.list), nrow = nrow(myquant.list[[1]])))
 	
@@ -933,21 +933,21 @@ CombineAllParameters <- function(myquant.list, column) {
 	return(z)
 }
 
-# example:
-# CombineAllParameters(myquant.ref, column = "Scaled")
+# example:
+# CombineAllParameters(myquant.ref, column = "Scaled")
 # CombineAllParameters(myquant.other, column = "Scaled")
 
-# Diagnostic tools
+# Diagnostic tools
 # lapply(myquant.scaled, function(x) c(summary(x$Scaled), "SD" = sd(x$Scaled, na.rm = TRUE)))
 # by(data = x$Scaled, INDICES = x$Source, FUN= function(y) {c("mean" = mean(y, na.rm = TRUE),"sd" = sd(y, na.rm = TRUE))})
 
-# PRINT THE SUMMARY OF DATA:
+# PRINT THE SUMMARY OF DATA:
 apply(CombineAllParameters(myquant.ref, column = "Scaled"), 2, function(x) c(summary(x), "SD" = sd(x, na.rm = TRUE)))
 apply(CombineAllParameters(myquant.other, column = "Scaled"), 2, function(x) c(summary(x), "SD" = sd(x, na.rm = TRUE)))
 apply(CombineAllParameters(myquant.ref2, column = "Scaled"), 2, function(x) c(summary(x), "SD" = sd(x, na.rm = TRUE)))
 apply(CombineAllParameters(myquant.other2, column = "Scaled"), 2, function(x) c(summary(x), "SD" = sd(x, na.rm = TRUE)))
 
-# CUSTOMISED PLOT OF DATA:
+# CUSTOMISED PLOT OF DATA:
 
 PiratePlot <- function(formula, data, method = c("mean.SD", "median.IQR"), 
 	inf.b.col = "black", inf.f.col = "grey", inf.opacity = 0.5, ...) {
@@ -961,27 +961,27 @@ PiratePlot <- function(formula, data, method = c("mean.SD", "median.IQR"),
 pirateplot(value ~ key, data = data, bty="n",
 	ylim = c(-2,2),
 	xlab = "", ylab = "",
-	# THEME:
+	# THEME:
 	theme = 2,
 		
-	# Configure the order: sequential as in orginal
+	# Configure the order: sequential as in orginal
 	sortx = "sequential",
 	
-	# Configure appearance:
+	# Configure appearance:
 	# ... transparency of elements:
 		#avg.line.o = 1,
 		# Inference interval:
 		inf.b.o = 1,
 		inf.f.o = inf.opacity,
 		#inf.f.o = inf.f.o,
-		# Beans:
+		# Beans:
 		bean.b.o = 0.0,
 		bean.f.o = 0.00,
-		# Barplot: OFF
+		# Barplot: OFF
 		bar.b.o = 0,
-		# Points:
-		point.o = 0.00,  # <--- change points opacity
-		# Average line:
+		# Points:
+		point.o = 0.00,  # <--- change points opacity
+		# Average line:
 		#avg.line.lwd = 0,
 				
 	# ... color of elements
@@ -991,18 +991,18 @@ pirateplot(value ~ key, data = data, bty="n",
 	inf.b.col = inf.b.col,
 	inf.lwd = 0.5,
 	
-	# color of gridlines
+	# color of gridlines
 	gl.col = "transparent",
 	
-	# other modifications:
+	# other modifications:
 	...
 	)
 	abline(h = 0, lwd = 1, lty = 1)
 }
 
-# Plot using means-SD scaling:
+# Plot using means-SD scaling:
 
-#  ... with CTRL data (reference.dataset):
+#  ... with CTRL data (reference.dataset):
 
 dev.new(width = 5, height = 8)
 	PiratePlot(key~value, data = gather(CombineAllParameters(myquant.ref, column = "Scaled")),
@@ -1013,7 +1013,7 @@ dev.new(width = 5, height = 8)
 	mtext("Mean", side = 2, at = 0, cex = 0.8, srt = 90, line = 1)
 	dev.copy(pdf, width = dev.size()[1], height = dev.size()[2], paste0("Rplot_Pirateplot_", reference.dataset, "_MeanCI_SD.pdf")); dev.off()
 
-#  ... with other dataset (dataset.other - e.g. "NeonVASP"):
+#  ... with other dataset (dataset.other - e.g. "NeonVASP"):
 
 dev.new(width = 5, height = 8)
 	PiratePlot(key~value, data = gather(CombineAllParameters(myquant.other, column = "Scaled")),
@@ -1024,7 +1024,7 @@ dev.new(width = 5, height = 8)
 	mtext("Mean", side = 2, at = 0, cex = 0.8, srt = 90, line = 1)
 	dev.copy(pdf, width = dev.size()[1], height = dev.size()[2], paste0("Rplot_Pirateplot_", dataset.other, "_MeanCI_SD.pdf")); dev.off()
 
-#  ... with other dataset (dataset.other - e.g. "NeonVASP"):
+#  ... with other dataset (dataset.other - e.g. "NeonVASP"):
 
 dev.new(width = 5, height = 8)
 	PiratePlot(key~value, data = gather(CombineAllParameters(myquant.other, column = "Scaled")),
@@ -1039,14 +1039,14 @@ dev.new(width = 5, height = 8)
 	dev.copy(pdf, width = dev.size()[1], height = dev.size()[2], paste0("Rplot_Pirateplot_", dataset.other, "_MeanCI_SD_Color.pdf")); dev.off()
 
 
-# Plot using median-0.5 IQR scaling:
+# Plot using median-0.5 IQR scaling:
 
-#  ... with CTRL:
+#  ... with CTRL:
 
 dev.new(width = 5, height = 8)
 	PiratePlot(key~value, data = gather(CombineAllParameters(myquant.ref2, column = "Scaled")),
 		inf.method = "iqr",
-		quant = 0.5, # add median lines (50% quantile)
+		quant = 0.5, # add median lines (50% quantile)
 		quant.lwd = 3,
 		quant.col = "black",
 		quant.length = 0.8,
@@ -1057,12 +1057,12 @@ dev.new(width = 5, height = 8)
 
 	dev.copy(pdf, width = dev.size()[1], height = dev.size()[2], paste0("Rplot_Pirateplot_", reference.dataset, "_Median_halfIQR.pdf")); dev.off()
 
-#  ... with VASP/other:
+#  ... with VASP/other:
 
 dev.new(width = 5, height = 8)
 	PiratePlot(key~value, data = gather(CombineAllParameters(myquant.other2, column = "Scaled")),
 		inf.method = "iqr",
-		quant = 0.5, # add median lines (50% quantile)
+		quant = 0.5, # add median lines (50% quantile)
 		quant.lwd = 3,
 		quant.col = "black",
 		quant.length = 0.8,
@@ -1076,12 +1076,12 @@ dev.new(width = 5, height = 8)
 
 	dev.copy(pdf, width = dev.size()[1], height = dev.size()[2], paste0("Rplot_Pirateplot_", dataset.other, "_Median_halfIQR.pdf")); dev.off()
 	
-# ... IN COLOUR:
+# ... IN COLOUR:
 
 dev.new(width = 5, height = 8)
 	PiratePlot(key~value, data = gather(CombineAllParameters(myquant.other2, column = "Scaled")),
 		inf.method = "iqr",
-		quant = 0.5, # add median lines (50% quantile)
+		quant = 0.5, # add median lines (50% quantile)
 		quant.lwd = 3,
 		quant.col = "black",
 		quant.length = 0.8,
@@ -1097,7 +1097,7 @@ dev.new(width = 5, height = 8)
 
 
 #----------------------------
-# Plot P values (-log(base=10))
+# Plot P values (-log(base=10))
 
 dev.new(width = 7, height = 1.5)
 	adj.p <- adjusted.p.values$adj.Holm; names(adj.p) <- unlist(myquant_abbrev)
@@ -1108,11 +1108,11 @@ dev.new(width = 7, height = 1.5)
 	abline(h = -log(0.05, base = 10), lty = 3)
 	setwd(Loc.save)
 	dev.copy(pdf, "Rplot_P-values_adj.pdf", width = dev.size()[1], height = dev.size()[2]); dev.off()
-  # End of plot.summary section
+  # End of plot.summary section
 }
 
 #------------------------------------------------------------------------------
-# Create a summary to export as a .csv file
+# Create a summary to export as a .csv file
 
 if(save.summary == TRUE) {
 
@@ -1152,19 +1152,19 @@ for(i in 1:length(results.list)) {
 }
 names(RESULTS) = names(results.list)
 
-# Combine all lists within RESULTS into a single data frame:
+# Combine all lists within RESULTS into a single data frame:
 
 rm(z)
 for(i in 1:length(RESULTS)) {
   param.name = names(RESULTS)[i] 
   if(i == 1) {
 
-    # First iteration of loop:
+    # First iteration of loop:
     z <- data.frame(matrix(NA, nrow = nrow(RESULTS[[1]]), ncol = ncol(RESULTS[[1]])))
     colnames(z) <- colnames(RESULTS[[1]])
     z <- RESULTS[[i]]
     z$Parameter <- rep(param.name, 2)
-    # ... thereafter:
+    # ... thereafter:
   } else {
     new.part <- RESULTS[[i]] 
     new.part$Parameter <- rep(param.name, 2)
@@ -1188,12 +1188,12 @@ setwd(Loc.save)
 write.csv(z, "Filopodia_PropertiesSummary.csv", row.names = FALSE)
 
 #------------------------------------------------------------------------------
-# Add additional statistics to the results table: 
-#   - fold changes
-#   - P value (Mann-Whitney before adjustment)
-#   - P value (with Holm adjustment)
-#   - z score (for each dataset, relative to the other dataset)
-#   - Cliff's delta
+# Add additional statistics to the results table: 
+#   - fold changes
+#   - P value (Mann-Whitney before adjustment)
+#   - P value (with Holm adjustment)
+#   - z score (for each dataset, relative to the other dataset)
+#   - Cliff's delta
 
 MedianFoldChange <- function(x) {
 	ref <- which(x$Source == reference.dataset)
@@ -1215,7 +1215,7 @@ fold.changes.medians <- lapply(myquant, MedianFoldChange)
 fold.changes.means <- lapply(myquant, MeanFoldChange)
 fold.changes.medians
 
-# Quality check:
+# Quality check:
 stopifnot(
   identical(length(fold.changes.medians),
 			length(fold.changes.means),
@@ -1228,11 +1228,11 @@ stopifnot(
             )
 )
 
-result.comp <- data.frame(matrix(NA, nrow = length(myquant), ncol = 0))  # Comparison between datasets
+result.comp <- data.frame(matrix(NA, nrow = length(myquant), ncol = 0))  # Comparison between datasets
 
-result.comp$"Fold change (median)" <- unlist(transpose(fold.changes.medians)[[1]])  # [[]]
+result.comp$"Fold change (median)" <- unlist(transpose(fold.changes.medians)[[1]])  # [[]]
 result.comp$"Fold change (mean)" <- unlist(transpose(fold.changes.means)[[1]])
-result.comp$"z-score" <- unlist(transpose(z.scores)[[1]])  # [[1]] for Other.vs.Ref
+result.comp$"z-score" <- unlist(transpose(z.scores)[[1]])  # [[1]] for Other.vs.Ref
 #result.comp$"Cohen's d" <- unlist(cohen.scores)
 result.comp$"Cliff's delta " <- unlist(delta.scores)
 result.comp$"P (Mann-Whitney)" <- adjusted.p.values$Mann.Whitney
@@ -1242,6 +1242,6 @@ result.comp
 
 write.csv(result.comp, "Filopodia_compare.csv")
 
-# end of 'save.summary' section
+# end of 'save.summary' section
 }
 graphics.off()

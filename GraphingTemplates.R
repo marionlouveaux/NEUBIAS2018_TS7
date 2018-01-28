@@ -1,27 +1,27 @@
-# GRAPHING TEMPLATES:
+# GRAPHING TEMPLATES:
 
 # ------------------------------------------------------------------------------
 
-# Two (or more) boxplots (with jitter)
+# Two (or more) boxplots (with jitter)
 
-	# applied to:
-	# Max lengths
-	# Median extension rate	:
-	# Median retraction rate:
-	# Growth consistency 	: 	(acf.dctm.crosspoints)
-	# Initial DCTM (new filo)
-	# Initial dB (new filo)
+	# applied to:
+	# Max lengths
+	# Median extension rate	:
+	# Median retraction rate:
+	# Growth consistency 	: 	(acf.dctm.crosspoints)
+	# Initial DCTM (new filo)
+	# Initial dB (new filo)
 	# Initial DCTM/dB (new filo)
-	# Mean straightness
+	# Mean straightness
 
-# Plain histogram 
-# Histogram with horizontal boxplot:
-# Two overlapping histograms (with transparency)
-# CDFs 
-# Scatterplots
+# Plain histogram 
+# Histogram with horizontal boxplot:
+# Two overlapping histograms (with transparency)
+# CDFs 
+# Scatterplots
 
 # ------------------------------------------------------------------------------
-# Import colour schemes (internal)
+# Import colour schemes (internal)
 
 setwd(Loc.Modules)
 source("ColourSchemes.R")
@@ -30,25 +30,25 @@ print(colourscheme.names)
 
 # ------------------------------------------------------------------------------
 
-# TWO BOXPLOTS (with jitter)
+# TWO BOXPLOTS (with jitter)
 
-	# applied to:
-	# Max lengths
-	# Median extension rate	:
-	# Median retraction rate:
-	# Growth consistency 	: 	(acf.dctm.crosspoints)
-	# Initial DCTM (new filo)
-	# Initial dB (new filo)
+	# applied to:
+	# Max lengths
+	# Median extension rate	:
+	# Median retraction rate:
+	# Growth consistency 	: 	(acf.dctm.crosspoints)
+	# Initial DCTM (new filo)
+	# Initial dB (new filo)
 	# Initial DCTM/dB (new filo)
-	# Mean straightness
+	# Mean straightness
 
 
 
-# 1. Standardise data input for graphs:
+# 1. Standardise data input for graphs:
 
 
 # Choose among colourscheme.names (from ColourSchemes.R)
-curr.cols = triad1  # used for manual-v-batch
+curr.cols = triad1  # used for manual-v-batch
 curr.cols = triad1[, 3:2]  # used for huang-renyi
 curr.cols
 
@@ -75,14 +75,14 @@ StandardGraphInput <- function(x, adjust.spt = "none", flip = "FALSE") {
     
     if(flip == TRUE) {adj = -adj}
         
-    # 2. Organise into table for plotting (curr.data)
+    # 2. Organise into table for plotting (curr.data)
     n1 = length(unlist(data1)) 
     n2 = length(unlist(data2))
     
     curr.data = data.frame(
         "Value" = c(unlist(data1) * adj, unlist(data2) * adj), 
         "Source" = c(rep(dataset.names[1], n1), rep(dataset.names[2], n2)))
-        # fix alphabetical ordering of X axis, to actual order of dataset names:
+        # fix alphabetical ordering of X axis, to actual order of dataset names:
         curr.data$Source <- factor(curr.data$Source, levels = dataset.names) 
     
     return(curr.data)
@@ -91,8 +91,8 @@ StandardGraphInput <- function(x, adjust.spt = "none", flip = "FALSE") {
 
 
 
-# 2. Quick stats - returns p value for t-test (if large and normally distributed sample) or mann-whitney (otherwise)
-#    function call: QuickStats("waviness.mean")
+# 2. Quick stats - returns p value for t-test (if large and normally distributed sample) or mann-whitney (otherwise)
+#    function call: QuickStats("waviness.mean")
 
 QuickStats <- function(x) {
  
@@ -104,18 +104,18 @@ QuickStats <- function(x) {
     n1 = length(unlist(data1)) 
     n2 = length(unlist(data2))
       
-  # 2. Large sample size?
+  # 2. Large sample size?
 	n.over.30 <- (n1 > 30) & (n2 < 30)
 	
   # 3. For big samples:
     if (n.over.30 == TRUE) {
         
-       # Test for normal distribution:
+       # Test for normal distribution:
         shapiro1 <- shapiro.test(unlist(data1))$p.value
         shapiro2 <- shapiro.test(unlist(data2))$p.value
         appr.normal <- (shapiro1 > 0.1) & (shapiro2 > 0.1)
         
-        # Conduct t-test if distr roughly normal
+        # Conduct t-test if distr roughly normal
         if (appr.normal == TRUE) {
             t <- t.test(unlist(data1), unlist(data2))$p.value
             t2 <- signif(t, 2)
@@ -125,7 +125,7 @@ QuickStats <- function(x) {
   # For small samples, and large but non-normally distributed samples       
     } else {
         mw <- wilcox.test(Value ~ Source, data = curr.data)$p.value
-        mw2 <- signif(mw, 2)  # significant digits
+        mw2 <- signif(mw, 2)  # significant digits
         z <- c("Mann-Whitney", paste("p = ", mw2))
     }  
     return(z)
@@ -133,7 +133,7 @@ QuickStats <- function(x) {
 
 
 
-# 2. Create boxplot
+# 2. Create boxplot
 
 Boxplot2 <- function(x, curr.title, curr.Ylab, col = rgb(t(curr.cols))) {
 
@@ -162,7 +162,7 @@ print(noquote("Thank you. Graphing functions imported."))
 
 
 # ------------------------------------------------------------------------------
-# CDFs 
+# CDFs 
 
 # same examples as boxplot above:
 
@@ -181,7 +181,7 @@ CdfPlot2 <- function(x, adjust.spt = "none", flip = FALSE,
     if(flip == TRUE) {adj = -adj}
 	
 	
-	# Extract data
+	# Extract data
     x = as.character(x)
     parameter.to.plot <- which(objectnames[[1]] == x)
     data1 = unlist(metalist[[1]][parameter.to.plot]) * adj
@@ -231,31 +231,31 @@ CdfPlot2 <- function(x, adjust.spt = "none", flip = FALSE,
 		length = 0.0, code = 3, angle = 180, col = "lightgrey", lty = 2)
 }
 
-# example: 
-# CdfPlot2("max.lengths", "Max Filopodium Length (CDF)", expression ("Length [" * mu * "m]"))
+# example: 
+# CdfPlot2("max.lengths", "Max Filopodium Length (CDF)", expression ("Length [" * mu * "m]"))
 
 
 
 # ------------------------------------------------------------------------------
 
-# Big ACF Plot:
+# Big ACF Plot:
 
 
 Count <- function(x) length(x[!is.na(x)])			 
 SE <- function(x) sd(x, na.rm=TRUE)/sqrt(Count(x))	 							
-#CI.z <- function(x) 1.96*sd(x, na.rm=TRUE)/sqrt(Count(x))    # Using Z distribution 
+#CI.z <- function(x) 1.96*sd(x, na.rm=TRUE)/sqrt(Count(x))    # Using Z distribution 
 
 CI <- function (x, ci = 0.95) { 							
 		
-		# Using T distribution; 
-		# Appropriate for small samples
+		# Using T distribution; 
+		# Appropriate for small samples
 		# ref: Rmisc package
 		# Ryan M. Hope (2013). Rmisc: Rmisc: Ryan Miscellaneous. R package version 1.5. https://CRAN.R-project.org/package=Rmisc
 		# citation("Rmisc")
 
-		# My adjustments from Rmisc::CI:
-		# 1. output as error value (not range around mean)
-		# 2. n as Count(x) instead of length(x), so that NA values do not contribute to n
+		# My adjustments from Rmisc::CI:
+		# 1. output as error value (not range around mean)
+		# 2. n as Count(x) instead of length(x), so that NA values do not contribute to n
 		
     a <- mean(x, na.rm = TRUE)
     s <- sd(x, na.rm = TRUE)

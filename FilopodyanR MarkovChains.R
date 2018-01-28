@@ -1,40 +1,40 @@
-# TIP FLUORESCENCE & MOVEMENT - Markov chains
+# TIP FLUORESCENCE & MOVEMENT - Markov chains
 
-# This script is part of a suite of scripts for analysis of filopodia dynamics 
-# using the Fiji plugin Filopodyan. 
+# This script is part of a suite of scripts for analysis of filopodia dynamics 
+# using the Fiji plugin Filopodyan. 
 #
-# Data input: requires an .Rdata file from upstream script 
-# ('Filpodyan CCF_subcluster-analysis.R') 
-# Data output: a large number of Markov chains based the original dataset (for each 
-#    filopodium, 10.000 chains for tip movement and 10.000 chains for fluorescence), and
-#    a summary of their properties relative to the original data: how many simulations 
-#    for each filopodium have a better correlation between movement and fluorescence than 
-#    the original dataset of that filopodium, and how many SDs away from the mean of the 
-#    pool of simulations is the observed real dataset for each filopodium
+# Data input: requires an .Rdata file from upstream script 
+# ('Filpodyan CCF_subcluster-analysis.R') 
+# Data output: a large number of Markov chains based the original dataset (for each 
+#    filopodium, 10.000 chains for tip movement and 10.000 chains for fluorescence), and
+#    a summary of their properties relative to the original data: how many simulations 
+#    for each filopodium have a better correlation between movement and fluorescence than 
+#    the original dataset of that filopodium, and how many SDs away from the mean of the 
+#    pool of simulations is the observed real dataset for each filopodium
 
 rm(list = ls())
 
 #--------------------------------------------------------------------------------
-# Install req package:
+# Install req package:
 
 #install.packages('DTMCPack', dependencies=TRUE, repos='http://cran.rstudio.com/')
 #install.packages('markovchain', dependencies=TRUE, repos='http://cran.rstudio.com/')
-# install.packages('animation', dependencies=TRUE, repos='http://cran.rstudio.com/') 
+# install.packages('animation', dependencies=TRUE, repos='http://cran.rstudio.com/') 
 # from: https://www.r-bloggers.com/r-animating-2d-and-3d-plots/ 
 
 library(DTMCPack)
 library(markovchain)
-# library(animation)
+# library(animation)
 
 
 #--------------------------------------------------------------------------------
-# Load data:
+# Load data:
 
- load('~/Documents/Postdoc/ANALYSIS_local-files/ANALYSIS LOGS/2017-03_TipF_withBg_ENA/Huang4-01_Norm-toGC/LastWorkspace_CCF_Subclusters.Rdata')
-# load('~/Documents/Postdoc/ANALYSIS_local-files/ANALYSIS LOGS/2017-03_TipF_withBg_VASP/Huang4-01_Norm-toGC/LastWorkspace_CCF_Subclusters.Rdata')
+ load('~/Documents/Postdoc/ANALYSIS_local-files/ANALYSIS LOGS/2017-03_TipF_withBg_ENA/Huang4-01_Norm-toGC/LastWorkspace_CCF_Subclusters.Rdata')
+# load('~/Documents/Postdoc/ANALYSIS_local-files/ANALYSIS LOGS/2017-03_TipF_withBg_VASP/Huang4-01_Norm-toGC/LastWorkspace_CCF_Subclusters.Rdata')
 
 #--------------------------------------------------------------------------------
-# 1. Required functions:
+# 1. Required functions:
 
 FirstNonNA <- function(x) {
 	nonNA.index <- which(!is.na(x))
@@ -47,7 +47,7 @@ LastNonNA <- function(x) {
 	last.nonNA <- max(nonNA.index, na.rm = TRUE)
 	return(last.nonNA)
 }
-NonNArange <- function(x) {   	# Doesn't clean up NAs within the time series! (intentionally)
+NonNArange <- function(x) {   	# Doesn't clean up NAs within the time series! (intentionally)
 	FirstNonNA(x):LastNonNA(x)
 	}
 
@@ -63,17 +63,17 @@ SimulateFilo <- function(y, x, n.sim = n.sim, output = "count", ...) {
 	stopifnot(length(x) == length(y))	
 	
 	#----
-	# 1. Prepare required elements and Markov Chain properties:
+	# 1. Prepare required elements and Markov Chain properties:
 
 	y1 <- y[NonNArange(y)]
 	x1 <- x[NonNArange(x)]
 	
 	states.y = c(1:9)
-	states.x = c(1:9) # this will need upgrading to handle NAs too 
+	states.x = c(1:9) # this will need upgrading to handle NAs too 
 	y.d <- cut(y1, 9, labels = states.y) # 'd' for discrete
 	x.d <- cut(x1, 9, labels = states.x)
 
-	# Solving the NAs problem:
+	# Solving the NAs problem:
 	
 	if(sum(is.na(y.d)) > 0) {
 		states.y[10] <- NA
@@ -99,7 +99,7 @@ SimulateFilo <- function(y, x, n.sim = n.sim, output = "count", ...) {
 		name = "Fluorescence")
 	
 	#----
-	# 2. Generate <n.sim> simulations
+	# 2. Generate <n.sim> simulations
 		
 	sim.rho <- rep(NA, length = n.sim)
 	sim.p <- rep(NA, length = n.sim)
@@ -129,7 +129,7 @@ SimulateFilo <- function(y, x, n.sim = n.sim, output = "count", ...) {
 	#----
 	# 3. Compare all simulations with orig. x & y
 
-	# 3a. Output how many simulations were as correlated as the original
+	# 3a. Output how many simulations were as correlated as the original
 	
 	
 		count <- Count(which(sim.rho > orig.rho))
@@ -139,7 +139,7 @@ SimulateFilo <- function(y, x, n.sim = n.sim, output = "count", ...) {
 
 		print(c("count" = count, "sd" = sd))
 
-	# 3c. output: complete
+	# 3c. output: complete
 		if(output == "complete") {
 			z <- list()
 			z$count = count			
@@ -156,11 +156,11 @@ SimulateFilo <- function(y, x, n.sim = n.sim, output = "count", ...) {
 
 }
 
-# Not a fast loop! I appreciate suggestions for speeding it up...
+# Not a fast loop! I appreciate suggestions for speeding it up...
 
 
 #--------------------------------------------------------------------------------
-# Run simulations for each filopodium, and compare with original on the go.
+# Run simulations for each filopodium, and compare with original on the go.
 		
 		
 n.filo = ncol(all.move)
@@ -170,15 +170,15 @@ simulation.SDs <- rep(NA, n.filo)
 
 SimulateFilo(all.move[,3], tip.f[,3], n.sim = 100)
 
-n.sim = 10  # Troubleshooting only, otherwise:
-# n.sim = 10000
+n.sim = 10  # Troubleshooting only, otherwise:
+# n.sim = 10000
 
 
 
 for(f in 1:n.filo) {
-# (Troubleshooting errors)
-# for(f in c(35, 37, 39, 41, 45)) {   
-# f = 35
+# (Troubleshooting errors)
+# for(f in c(35, 37, 39, 41, 45)) {   
+# f = 35
 
 	z <- try(SimulateFilo(all.move[, f], tip.f[, f], n.sim = n.sim), silent = TRUE)
 	if(is.numeric(z[1])) {
@@ -197,18 +197,18 @@ mcresults[order(mcresults$Sim.proportion),]
 
 
 #--------------------------------------------------------------------------------
-# Visualise simulation results:
+# Visualise simulation results:
 
-# load datasets with simulations
-# load('~/Documents/Postdoc/ANALYSIS_local-files/ANALYSIS LOGS/2017-03_TipF_withBg_ENA/Huang4-01_Norm-toGC/LastWorkspace_MarkovChains.Rdata')
-# load('~/Documents/Postdoc/ANALYSIS_local-files/ANALYSIS LOGS/2017-03_TipF_withBg_VASP/Huang4-01_Norm-toGC/LastWorkspace_MarkovChains.Rdata') (not ready for VASP! workspace contam with a different analysis)
+# load datasets with simulations
+# load('~/Documents/Postdoc/ANALYSIS_local-files/ANALYSIS LOGS/2017-03_TipF_withBg_ENA/Huang4-01_Norm-toGC/LastWorkspace_MarkovChains.Rdata')
+# load('~/Documents/Postdoc/ANALYSIS_local-files/ANALYSIS LOGS/2017-03_TipF_withBg_VASP/Huang4-01_Norm-toGC/LastWorkspace_MarkovChains.Rdata') (not ready for VASP! workspace contam with a different analysis)
 
 dev.new(width = 7, height = 3.5)
 matplot(simulation.count, simulation.SDs, type = "p", pch = 16, #log = "x",
 	xlab = paste("No. simulations in", n.sim, "where Rho(sim) > Rho(orig)"),
 	ylab = "No. SDs from simulation mean")
 
-matplot(log(simulation.count, base = 10), simulation.SDs, type = "p", pch = 16, # log = "x",
+matplot(log(simulation.count, base = 10), simulation.SDs, type = "p", pch = 16, # log = "x",
 	xlab = paste("log(P)"),
 	ylab = "No. SDs from simulation mean")
 	
@@ -216,8 +216,8 @@ mcresults
 
 cluster.full <- GoCluster(ccf.tip.dctm, n.clusters = SearchClusterSpace(ccf.tip.dctm, target.size = target.size)$n.clusters)
 
-# top.cluster vs others: 
-# top cluster: 
+# top.cluster vs others: 
+# top cluster: 
 SearchClusterSpace(ccf.tip.dctm, target.size = target.size)
 as.numeric(cluster.full == SearchClusterSpace(ccf.tip.dctm, target.size = target.size)$top.cluster.ID)
 TCS.membership <- cluster.full == SearchClusterSpace(ccf.tip.dctm, target.size = target.size)$top.cluster.ID
@@ -229,9 +229,9 @@ dev.new(height = 4.6, width = 4.2)
 par(mar = c(5,4,1,0)+0.5)
 par(bty = "n")
 plot(simulation.count, simulation.SDs, type = "p", pch = 18, cex = 1.75,
-	# Color by cluster membership:
+	# Color by cluster membership:
 	col = as.vector(factor(TCS.membership, labels = as.character(curr.cols.60[1:2]))),
-	# Color by CCF at 0:
+	# Color by CCF at 0:
 	#col = as.vector(cut(means.at.0, breaks = 11, labels = curr.pal)),
 	#log = "x",
 	xlab = paste("No. simulations where Rho(sim) > Rho(orig)"),
@@ -265,28 +265,28 @@ dev.new(width = 6, height = 4.9)
 		"p = 0.0001 (1 simulation)", pos = 4, cex = 0.8, col = "lightgrey")
 	
 #--------------------------------------------------------------------------------
-# Visualise simulation method:
+# Visualise simulation method:
 rm(list= ls())
 load('~/Documents/Postdoc/ANALYSIS_local-files/ANALYSIS LOGS/2017-03_TipF_withBg_ENA/Huang4-01_Norm-toGC/LastWorkspace_MarkovChains.Rdata')
 
-# IMPORTANT: REEXECUTE THE SimulateFilo FUNCTION! 
+# IMPORTANT: REEXECUTE THE SimulateFilo FUNCTION! 
 
 SimulateFilo <- function(y, x, n.sim = n.sim, output = "count", ...) {
 	
 	stopifnot(length(x) == length(y))	
 	
 	#----
-	# 1. Prepare required elements and Markov Chain properties:
+	# 1. Prepare required elements and Markov Chain properties:
 
 	y1 <- y[NonNArange(y)]
 	x1 <- x[NonNArange(x)]
 	
 	states.y = c(1:9)
-	states.x = c(1:9) # this will need upgrading to handle NAs too 
+	states.x = c(1:9) # this will need upgrading to handle NAs too 
 	y.d <- cut(y1, 9, labels = states.y) # 'd' for discrete
 	x.d <- cut(x1, 9, labels = states.x)
 
-	# Solving the NAs problem:
+	# Solving the NAs problem:
 	
 	if(sum(is.na(y.d)) > 0) {
 		states.y[10] <- NA
@@ -312,7 +312,7 @@ SimulateFilo <- function(y, x, n.sim = n.sim, output = "count", ...) {
 		name = "Fluorescence")
 	
 	#----
-	# 2. Generate <n.sim> simulations
+	# 2. Generate <n.sim> simulations
 		
 	sim.rho <- rep(NA, length = n.sim)
 	sim.p <- rep(NA, length = n.sim)
@@ -342,7 +342,7 @@ SimulateFilo <- function(y, x, n.sim = n.sim, output = "count", ...) {
 	#----
 	# 3. Compare all simulations with orig. x & y
 
-	# 3a. Output how many simulations were as correlated as the original
+	# 3a. Output how many simulations were as correlated as the original
 	
 	
 		count <- Count(which(sim.rho > orig.rho))
@@ -352,7 +352,7 @@ SimulateFilo <- function(y, x, n.sim = n.sim, output = "count", ...) {
 
 		print(c("count" = count, "sd" = sd))
 
-	# 3c. output: complete
+	# 3c. output: complete
 		if(output == "complete") {
 			z <- list()
 			z$count = count			
@@ -370,7 +370,7 @@ SimulateFilo <- function(y, x, n.sim = n.sim, output = "count", ...) {
 }
 getwd()
 
-# SAVE TABLE AS CSV FILE:
+# SAVE TABLE AS CSV FILE:
 
 #setwd(Loc)
 #setwd("/Users/Lab/Documents/Postdoc/ANALYSIS_local-files/ANALYSIS LOGS/2017-03_TipF_withBg_VASP/Huang4-01_Norm-toGC")
@@ -378,25 +378,25 @@ getwd()
 
 
 ###------------------------------------------------------------------------
-### VISUALISATION OF ONE EXAMPLE FILOPODIUM
+### VISUALISATION OF ONE EXAMPLE FILOPODIUM
 
-# A good candidate filopodium for ENA DATASET:
-# 36   DCTM (9)_5-4-01-4            0         0.0000  3.3561655
+# A good candidate filopodium for ENA DATASET:
+# 36   DCTM (9)_5-4-01-4            0         0.0000  3.3561655
 cf <- 36
 
-# Raw data:
+# Raw data:
 tip.f[, cf]
 all.move[, cf]
 
-# Discrete data:
+# Discrete data:
 dS.i <- all.dS[, cf]
 x.disc <- as.numeric(cut(tip.f[, cf], 9, levels = c(1:9)))
 y.disc <- as.numeric(cut(all.move[, cf], 9, levels = c(1:9)))
 
-# Simulation data:
+# Simulation data:
 ls()
 
-# recreate an example simulation for this filopodium: 
+# recreate an example simulation for this filopodium: 
 set.seed(0.1)
 cf.results <- SimulateFilo(all.move[, cf], tip.f[, cf], 10000, output = "complete")
 cf.results$sim.rho[which.max(cf.results$sim.rho)]
@@ -407,7 +407,7 @@ zzz = 19
 dS.i <- all.dS[, cf]
 x.disc <- as.numeric(cut(tip.f[, cf], 9, levels = c(1:9)))
 y.disc <- as.numeric(cut(all.move[, cf], 9, levels = c(1:9)))
-sim.max <- zzz  # chosen arbitrarily; not far from mean (0.06, mean 0.02)
+sim.max <- zzz  # chosen arbitrarily; not far from mean (0.06, mean 0.02)
 
 head(cf.results$sim.rho, 100) 
 
@@ -418,9 +418,9 @@ cf.sim.tip <- cf.results$sim.tip [, sim.max]
 cf.dS.i  <- seq(0,240,by = 2)
 
 #---------
-# PLOT 1:
+# PLOT 1:
 
-# data.frame(dS.i, x.disc, y.disc)
+# data.frame(dS.i, x.disc, y.disc)
 
 dev.new(width = 8, height = 5.4)
 par(mfrow=c(2,2))
@@ -457,13 +457,13 @@ orig.rho <- curr.rho
 legend("bottomright", legend = paste("Rho = ", signif(curr.rho, 2)), bty = "n")
 
 
-# PLOT 3 and 4: redefine x.disc and y.disc, and re-execute code above
+# PLOT 3 and 4: redefine x.disc and y.disc, and re-execute code above
 
 x.disc <- cf.sim.tip
 y.disc <- cf.sim.move
 length(y.disc)
 
-# Now re-execute the code above.
+# Now re-execute the code above.
 
 matplot(cf.dS.i, y.disc,
 	type = "l",
@@ -498,7 +498,7 @@ legend("bottomright", legend = paste("Rho = ", signif(curr.rho, 2)), bty = "n")
 }
 
 
-# PLOT 5:  HISTOGRAM for ONE FILOPODIUM
+# PLOT 5:  HISTOGRAM for ONE FILOPODIUM
 
 dev.new(width = 8, height = 5.4)
 par(mfrow=c(2,2))
@@ -506,7 +506,7 @@ par(mar = c(4,4,1,4) + 0.1)
 
 sim.rho <- cf.results$sim.rho
 
-hist(sim.rho,  # breaks = 20,
+hist(sim.rho,  # breaks = 20,
 	main = "",
 	xlab = "Spearman Rho",
 	ylab = "Frequency",
@@ -517,8 +517,8 @@ hist(sim.rho,  # breaks = 20,
 abline(v = orig.rho,
 	col = "red",
 	lty = 2)
-# legend("topleft", legend = paste(n.sim, "simulations\n max =", signif(max(sim.rho),2)), text.col = "black", bty = "n")
+# legend("topleft", legend = paste(n.sim, "simulations\n max =", signif(max(sim.rho),2)), text.col = "black", bty = "n")
 max(sim.rho)
-# legend("bottomright", legend = paste("n(sim) [Rho > orig]\n/n(sim) =", signif(p.rho,2)), bty = "n")
-# legend("bottomright", legend = paste("P(Rho) =", signif(p.rho,2)), bty = "n")
-# legend("topright", legend = paste("SD from mean:", signif(sd.count, 2)), bty = "n", text.col = "red")	
+# legend("bottomright", legend = paste("n(sim) [Rho > orig]\n/n(sim) =", signif(p.rho,2)), bty = "n")
+# legend("bottomright", legend = paste("P(Rho) =", signif(p.rho,2)), bty = "n")
+# legend("topright", legend = paste("SD from mean:", signif(sd.count, 2)), bty = "n", text.col = "red")	

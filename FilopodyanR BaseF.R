@@ -1,17 +1,17 @@
-# This script uses base fluorescence data from FilopodyanR modules 1 and 1-2
-# and plots Channel 1 vs Channel 2 Base Fluorescence (providing a number of 
-# options for background correction). 
+# This script uses base fluorescence data from FilopodyanR modules 1 and 1-2
+# and plots Channel 1 vs Channel 2 Base Fluorescence (providing a number of 
+# options for background correction). 
 
 #-----------------------------------------------------------------
-# IMPORT DATA (after analysis with masterscript)
+# IMPORT DATA (after analysis with masterscript)
 
 rm(list = ls())
 load('VASP-v-GAPRFP.Rdata')
 
-# Check n-numbers match for the two datasets:
-	# for n(filopodia) 
+# Check n-numbers match for the two datasets:
+	# for n(filopodia) 
 if((ncol(metalist[[1]]$all.length) == ncol(metalist[[2]]$all.length)) 
-	# and n(GCs)
+	# and n(GCs)
 	& (metalist[[1]]$n.tables == metalist[[2]]$n.tables)) {
 
 		cat("n numbers for filopodia and GCs match between two datasets: ")
@@ -29,28 +29,28 @@ if((ncol(metalist[[1]]$all.length) == ncol(metalist[[2]]$all.length))
 
 
 #-----------------------------------------------------------------
-# Required functions and packages:
+# Required functions and packages:
 
-# Packages:
-# install.packages('RColorBrewer', dependencies=TRUE, repos='http://cran.rstudio.com/')
+# Packages:
+# install.packages('RColorBrewer', dependencies=TRUE, repos='http://cran.rstudio.com/')
 library(RColorBrewer)
 
-# Functions:
+# Functions:
 Count <- function(x) length(x[!is.na(x)])			 
 SE <- function(x) sd(x, na.rm=TRUE)/sqrt(Count(x))	 							
-# CI <- function(x) 1.96*sd(x, na.rm=TRUE)/sqrt(Count(x))     
+# CI <- function(x) 1.96*sd(x, na.rm=TRUE)/sqrt(Count(x))     
 
 CI <- function (x, ci = 0.95) { 							
 		
-		# Using T distribution; 
-		# Appropriate for small samples
+		# Using T distribution; 
+		# Appropriate for small samples
 		# ref: Rmisc package
 		# Ryan M. Hope (2013). Rmisc: Rmisc: Ryan Miscellaneous. R package version 1.5. https://CRAN.R-project.org/package=Rmisc
 		# citation("Rmisc")
 
-		# My adjustments from Rmisc::CI:
-		# 1. output as error value (not range around mean)
-		# 2. n as Count(x) instead of length(x), so that NA values do not contribute to n
+		# My adjustments from Rmisc::CI:
+		# 1. output as error value (not range around mean)
+		# 2. n as Count(x) instead of length(x), so that NA values do not contribute to n
 		
     a <- mean(x, na.rm = TRUE)
     s <- sd(x, na.rm = TRUE)
@@ -72,13 +72,13 @@ MovingAverage <- function(x, w = 5) {
 
 #-----------------------------------------------------------------
 
-# channel.1: 
+# channel.1: 
 dataset.names[1]
 
-# channel.2:
+# channel.2:
 dataset.names[2]
 
-# Background correction
+# Background correction
 bg.settings = c(
 	setting.1 = "all.base.nor.raw",
 	setting.2 = "all.base.nor.corrected.frame",
@@ -88,16 +88,16 @@ bg.settings = c(
 	)
 	
 bg.setting.names = c(
- setting.1 = "Base raw / GC raw",  # (original method)
- setting.2 = "Base local corr / GC frame corr",
- setting.3 = "Base local corr / GC boundary corr",
- setting.4 = "Base frame corr / GC frame corr",
- setting.5 = "Base boundary corr / GC boundary corr"
+ setting.1 = "Base raw / GC raw",  # (original method)
+ setting.2 = "Base local corr / GC frame corr",
+ setting.3 = "Base local corr / GC boundary corr",
+ setting.4 = "Base frame corr / GC frame corr",
+ setting.5 = "Base boundary corr / GC boundary corr"
 )
 
 
 #-----------------------------------------------------------------
-# GRAPHING FUNCTIONS:
+# GRAPHING FUNCTIONS:
 
 DefYRange <- function(x,y) {
 	
@@ -121,8 +121,8 @@ GraphBaseF <- function(
 				new = TRUE,
 				...) {
 
-	# x = all.base.nor, dataset1
-	# y =  all.base.nor, dataset2
+	# x = all.base.nor, dataset1
+	# y =  all.base.nor, dataset2
 	
 	if(z.score == "TRUE") {
 		
@@ -148,8 +148,8 @@ GraphBaseF <- function(
 	}	
 
 #	cols <- c("#FFB266", "666666")
-	# original colors: "#FFB266", "#00000040"
-	# original transparencies: "#FFB26680", "#00000020"
+	# original colors: "#FFB266", "#00000040"
+	# original transparencies: "#FFB26680", "#00000020"
 	cols.tr <- paste0(cols, "40")
 
 	
@@ -162,14 +162,14 @@ if(new == TRUE) {
 	x.range = 1:(spt*bb+6)
 	y.range = DefYRange(x1.mean[x.range], x2.mean[x.range])
 
-# Plot dataset 1
+# Plot dataset 1
 dS.vector <- metalist[[1]]$dS.vector
 matplot(dS.vector[x.range], x1.mean[x.range],
 	type = "l", 
 	xlab = "Time [s]",
 	ylab = y.label,
 	ylim = y.range,
-#	xlim = c(-spt*bb, spt*bb),   # EDIT ON 22 Feb 2017 (shorter X axis)
+#	xlim = c(-spt*bb, spt*bb),   # EDIT ON 22 Feb 2017 (shorter X axis)
 	xlim = c(-spt*bb, spt*3),
 	cex.axis = 1.1,
 	cex.lab = 1.1,
@@ -182,15 +182,15 @@ ci.lo = x1.mean - x1.ci
 DrawErrorAsPolygon(dS.vector, ci.hi, ci.lo, 0:44, col = cols.tr[1])
 abline(v = 0, lty = 3)
 
-# Plot dataset 2:
+# Plot dataset 2:
 dS.vector <- metalist[[2]]$dS.vector
 lines(dS.vector[x.range], x2.mean[x.range],
 	lwd = 4,
 	col = cols[2])	
  ci.hi = x2.mean + x2.ci
- ci.lo = x2.mean - x2.ci
- DrawErrorAsPolygon(dS.vector, ci.hi, ci.lo, 0:44, col = cols.tr[2])
- abline(v = 0, lty = 3)
+ ci.lo = x2.mean - x2.ci
+ DrawErrorAsPolygon(dS.vector, ci.hi, ci.lo, 0:44, col = cols.tr[2])
+ abline(v = 0, lty = 3)
 	
 }
 
@@ -210,7 +210,7 @@ legend("topright", legend = dataset.names[1], bty = "n", text.col = default.cols
 legend("bottomleft", legend = paste0("n(filo) = ", n.filo, ", n(GC) = ", n.GC), bty = "n")
 
 #---------------------------
-# LOAD AND PLOT ENA DATASET:
+# LOAD AND PLOT ENA DATASET:
 
 load('ENA-v-GAPRFP.Rdata')
 n.filo = 53
@@ -229,10 +229,10 @@ legend("bottomleft", legend = paste0("n(filo) = ", n.filo, ", n(GC) = ", n.GC), 
 
 
 #-------------------------------------------------------------------------------
-# Exploring different modes of background correction:
+# Exploring different modes of background correction:
 
 
-# (Orig raw) vs (Local Base / GC Frame)
+# (Orig raw) vs (Local Base / GC Frame)
 
 # # GraphBaseF(
 	# metalist[[1]]$all.base.nor.raw, metalist[[1]]$all.base.nor.corrected.frame,
@@ -245,7 +245,7 @@ legend("bottomleft", legend = paste0("n(filo) = ", n.filo, ", n(GC) = ", n.GC), 
 # legend("topleft", legend = bg.setting.names[2], bty = "n", text.col = default.cols[2])
 
 
-# # (Orig raw) vs (Local Base / GC Boundary)
+# # (Orig raw) vs (Local Base / GC Boundary)
 
 # GraphBaseF(
 	# metalist[[1]]$all.base.nor.raw, metalist[[1]]$all.base.nor.corrected.boundary,
@@ -255,7 +255,7 @@ legend("bottomleft", legend = paste0("n(filo) = ", n.filo, ", n(GC) = ", n.GC), 
 # legend("bottomright", legend = bg.setting.names[1], bty = "n", text.col = default.cols[1])
 # legend("topleft", legend = bg.setting.names[3], bty = "n", text.col = default.cols[2])
 
-# # 3. (Orig raw) vs (Frame-corrected for both base and body)
+# # 3. (Orig raw) vs (Frame-corrected for both base and body)
 
 # GraphBaseF(
 	# metalist[[1]]$all.base.nor.raw, metalist[[1]]$all.base2.nor.corrected.frame,
@@ -265,7 +265,7 @@ legend("bottomleft", legend = paste0("n(filo) = ", n.filo, ", n(GC) = ", n.GC), 
 # legend("bottomright", legend = bg.setting.names[1], bty = "n", text.col = default.cols[1])
 # legend("topleft", legend = bg.setting.names[4], bty = "n", text.col = default.cols[2])
 
-# # 4. (Orig Raw) vs (Boundary-corrected for both base and body)
+# # 4. (Orig Raw) vs (Boundary-corrected for both base and body)
 
 # GraphBaseF(
 	# metalist[[1]]$all.base.nor.raw, metalist[[1]]$all.base3.nor.corrected.boundary,
@@ -277,7 +277,7 @@ legend("bottomleft", legend = paste0("n(filo) = ", n.filo, ", n(GC) = ", n.GC), 
 
 
 
-# # Bg: no Bg correction:
+# # Bg: no Bg correction:
 
 # GraphBaseF(
 	# metalist[[1]]$all.base.nor.raw,
@@ -289,7 +289,7 @@ legend("bottomleft", legend = paste0("n(filo) = ", n.filo, ", n(GC) = ", n.GC), 
 # legend("bottomright", legend = "NeonENA", bty = "n", text.col = default.cols[1])
 # legend("topright", legend = "GAP-RFP", bty = "n", text.col = default.cols[2])
 
-# # Bg: Settings 2
+# # Bg: Settings 2
 
 # GraphBaseF(
 	# metalist[[1]]$all.base.nor.corrected.frame,
@@ -299,7 +299,7 @@ legend("bottomleft", legend = paste0("n(filo) = ", n.filo, ", n(GC) = ", n.GC), 
 # )
 # legend("topleft", legend = bg.setting.names[2], bty = "n")
 
-# # Bg: Settings 3
+# # Bg: Settings 3
 
 # GraphBaseF(
 	# metalist[[1]]$all.base.nor.corrected.boundary,
@@ -307,7 +307,7 @@ legend("bottomleft", legend = paste0("n(filo) = ", n.filo, ", n(GC) = ", n.GC), 
 # )
 # legend("topleft", legend = bg.setting.names[3], bty = "n")
 
-# # Bg: Settings 4
+# # Bg: Settings 4
 
 # GraphBaseF(
 	# metalist[[1]]$all.base2.nor.corrected.frame,
@@ -315,7 +315,7 @@ legend("bottomleft", legend = paste0("n(filo) = ", n.filo, ", n(GC) = ", n.GC), 
 # )
 # legend("topleft", legend = bg.setting.names[4], bty = "n")
 
-# # Bg: Settings 5
+# # Bg: Settings 5
 
 # GraphBaseF(
 	# metalist[[1]]$all.base3.nor.corrected.boundary,
@@ -329,7 +329,7 @@ legend("bottomleft", legend = paste0("n(filo) = ", n.filo, ", n(GC) = ", n.GC), 
 # #text(x = 44, y = 1.03, label = dataset.names[1], pos = 2, col = "#FFB266")
 
 
-# # For NeonENA, PLOT MEAN BASE, BASE BG (dT), FRAME BG (dT), BOUNDARY BG (dT)
+# # For NeonENA, PLOT MEAN BASE, BASE BG (dT), FRAME BG (dT), BOUNDARY BG (dT)
 
 # metalist[[1]]$new.from.short
 
@@ -343,7 +343,7 @@ legend("bottomleft", legend = paste0("n(filo) = ", n.filo, ", n(GC) = ", n.GC), 
 	# xlim = c(-40, 40),
 	# xlab = "dT [s]",
 	# ylab = "Pixel intensity",
-# # 	main = "Base Fluorescence during initiation",
+# # 	main = "Base Fluorescence during initiation",
 	# main = "",
 	# lab = c(6, 3, 7),
 	# cex.main = 0.8,
