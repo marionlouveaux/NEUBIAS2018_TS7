@@ -226,7 +226,7 @@ for (i in extract) {
 		# Important addition for IDing columns:  # Added 8. feb 2017
 		ID				= extractID(all.names[i]); IDs[i] <- ID
 		vec      	   = readLines(all.names[i])[1]
-		header   	   = unlist(strsplit(vec, "\t"))
+		header   	   = unlist(strsplit(vec, separator))
 		# Important addition for IDing columns:
 		header		   = paste(header, rep(ID, length(header)), sep = "_") 
 		tab      	   = read.table(all.names[i], sep = separator, skip = 1)
@@ -261,7 +261,8 @@ for (i in extract) {
 	all.names2[i]
 		ID			   = extractID(all.names2[i]); IDs[i] <- ID
 		vec      	   = readLines(all.names2[i])[1]
-		header   	   = unlist(strsplit(vec, "\t"))		
+		header   	   = unlist(strsplit(vec, separator))	## sep as coma does not work as there is coma in the header
+		## " ,T (0),Base X (0),Base Y (0),Tip X (0),Tip Y (0),||[body,base]|| (0),||[base,tip]||  (0),..." + missing dT column
 		header		   = paste(header, rep(ID, length(header)), sep = "_") 
 		tab      	   = read.table(all.names2[i], sep = separator, skip = 1)
 		colnames(tab)  = header
@@ -305,7 +306,7 @@ if(exists("all.names3")) {
 	all.names3
 		ID			   = extractID(all.names3[i]); IDs[i] <- ID
 		vec      	   = readLines(all.names3[i])[1]
-		header   	   = unlist(strsplit(vec, "\t"))
+		header   	   = unlist(strsplit(vec, separator))
 		header		   = paste(header, rep(ID, length(header)), sep = "_") ; 
 		
 		tab      	   = read.table(all.names3[i], sep = separator, skip = 1)
