@@ -2,6 +2,8 @@
 
 # This script calls various FilopodyanR modules and integrates output
 
+library(magrittr)
+
 #-------------------------------------------------------------------------------
 # Clean current workspace. WARNING: deletes everything in current workspace
 
