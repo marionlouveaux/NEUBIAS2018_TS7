@@ -49,7 +49,7 @@ print(colourscheme.names)
 
 # Choose among colourscheme.names (from ColourSchemes.R)
 curr.cols = triad1  # used for manual-v-batch
-curr.cols = triad1[, 3:2]  # used for huang-renyi
+# curr.cols = triad1[, 3:2]  # used for huang-renyi
 curr.cols
 
 
@@ -85,17 +85,19 @@ StandardGraphInput <- function(x, adjust.spt = "none", flip = "FALSE") {
   
     
     curr.data = data.frame(
-        # "Value" = c(unlist(data1) * adj, unlist(data2) * adj), 
-        # "Source" = c(rep(dataset.names[1], n1), rep(dataset.names[2], n2)))
-        # fix alphabetical ordering of X axis, to actual order of dataset names:
-        
-    "Value" = data %>%
-      purrr::map(function(x) unlist(x)*adj) %>%
-      unlist(.),
-    "Source" = apply(t(1:length(data)), 2, function(x){
-      rep(dataset.names[x], length(unlist(data[[i]])))
-    }) 
-)
+      # "Value" = c(unlist(data1) * adj, unlist(data2) * adj), 
+      # "Source" = c(rep(dataset.names[1], n1), rep(dataset.names[2], n2)))
+      # fix alphabetical ordering of X axis, to actual order of dataset names:
+      
+      Value = data %>%
+        purrr::map(function(x) unlist(x)*adj) %>%
+        unlist(.),
+      Source = apply(t(1:length(data)), 2, function(x){
+        rep(dataset.names[x], n[x])
+      }) %>%
+        unlist(.)
+      
+    )
     curr.data$Source <- factor(curr.data$Source, levels = dataset.names) 
         
     return(curr.data)
@@ -108,7 +110,7 @@ StandardGraphInput <- function(x, adjust.spt = "none", flip = "FALSE") {
 #    function call: QuickStats("waviness.mean")
 
 QuickStats <- function(x) {
- 
+ if (length(metalist) == 2){
   # 1. Extract data from metalist
     x = as.character(x)
     parameter.to.plot <- which(objectnames[[1]] == x)
@@ -142,6 +144,9 @@ QuickStats <- function(x) {
         z <- c("Mann-Whitney", paste("p = ", mw2))
     }  
     return(z)
+ }else{
+   return("No stats, more than two classes.")
+ }
 }
 
 
