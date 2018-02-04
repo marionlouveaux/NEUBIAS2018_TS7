@@ -153,7 +153,7 @@ QuickStats <- function(x) {
 
 # 2. Create boxplot
 
-Boxplot2 <- function(x, curr.title, curr.Ylab, col = rgb(t(curr.cols))) {
+Boxplot2 <- function(curr.data, curr.title, curr.Ylab, col = rgb(t(curr.cols))) {
 
     #dev.new()
     		ylo = min(curr.data$Value, na.rm = TRUE)
