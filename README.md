@@ -9,7 +9,7 @@ The goal of the training school was to discover, explore and deconstruct several
 
 I chose 1) to improve the compatibility of the R analysis to a general case composed of more than two datasets, and 2) to build a user interface using R Shiny to display the results of the R analysis. Due to the limited time, I made only partial modifications that should be considered as ideas. To run the Shiny app, a) run FilopodyanR_MASTERSCRIPT.R till line 110 included b) Then run Filopodyan3 Module 3.R till line 81 included c) Run the app.R contained in the Filopodia subfolder.
 
-The modified R scripts can be accessed here: https://github.com/marionlouveaux/NEUBIAS2018_TS7/blob/master/
+The modified R scripts can be accessed here: https://github.com/marionlouveaux/NEUBIAS2018_TS7/
 
 And here is a snapshot of the Shiny app I made:
 
