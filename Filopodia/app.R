@@ -80,7 +80,7 @@ server <- function(input, output) {
      x1 <- "med.rate.extens"
      
      curr.data <- StandardGraphInput(x1, adjust.spt = "divide"); curr.data
-     Boxplot2(x1, 
+     Boxplot2(curr.data = curr.data, 
               curr.title = "Median Extension Rate Per Filopodium",              # <---- Remember to edit here!
               curr.Ylab = expression("Median fDCTM (extending) [" * mu * "m/s]")  # <---- Remember to edit here!
      )
