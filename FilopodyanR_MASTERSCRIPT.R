@@ -17,7 +17,7 @@ ls()
 
 # Where is your data located?
 
-dir <- "/Users/mlouveaux/Documents/Postdoc/Logistique/Conferences_Missions/Szeged_NEUBIAS_2018/TS7/Vasja/Vasja/Datasets"
+dir <- "../Datasets"
 
 folder.names <- c(
     folder.name1 = paste0(dir, "/4a_Manually-curated-tables"),   # <--- Set folder locations of intput data tables
@@ -42,8 +42,8 @@ dataset.names <- c(
 Loc.save <- paste0(dir, "/4a_RESULTS")			# <---- Set saving directory here
 
 # SCRIPTS:
-
-Loc.Modules <- c("/Users/mlouveaux/Documents/Postdoc/Logistique/Conferences_Missions/Szeged_NEUBIAS_2018/TS7/Vasja/Vasja/Scripts_FilopodyanR")
+library(here)
+Loc.Modules <- here()
 scripts <- c("FilopodyanR Module 1.R", "FilopodyanR Module 2.R")
 
 # Run Module 3 to compare filopodium properties?
@@ -58,7 +58,9 @@ save.summary = TRUE
 
 # Test working directories:
 
+setwd(Loc.Modules)
 setwd(Loc.save)
+setwd(Loc.Modules)
 setwd(folder.names[1])
 setwd(Loc.Modules)
 
