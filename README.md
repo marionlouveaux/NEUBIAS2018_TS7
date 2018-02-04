@@ -11,4 +11,4 @@ The goal of the training school was to discover, explore and deconstruct several
 
 Here is a snapshot of the Shiny app:
 
-https://github.com/marionlouveaux/NEUBIAS2018_TS7/blob/master/Filopodia/snapshot_app.png
+![](https://github.com/marionlouveaux/NEUBIAS2018_TS7/blob/master/Filopodia/snapshot_app.png)
